@@ -61,10 +61,6 @@ void CameraClass::SetRight(float x, float y, float z)
 	m_fRightZ = z;
 }
 
-D3DXVECTOR3 CameraClass::GetPos()
-{
-	return D3DXVECTOR3(m_fPositionX, m_fPositionY, m_fPositionZ);
-}
 D3DXVECTOR3 CameraClass::GetRotation()
 {
 	return D3DXVECTOR3(m_fRotationX, m_fRotationY, m_fRotationZ);
@@ -205,4 +201,23 @@ void CameraClass::MoveCamera(MOVE eMove, float frametime, signed long MouseMove)
 	}
 		break;
 	}
+}
+
+void CameraClass::RotateCamera(MOVE eMove, float fRotSpeed)
+{
+	D3DXVECTOR3 vLook = GetLook();
+
+	D3DXMATRIX	RotationMatrix;
+	D3DXMatrixRotationAxis(&RotationMatrix, &vLook, fRotSpeed);
+
+	D3DXVECTOR3	vUp = GetUp();
+	D3DXVECTOR3	vRight = GetRight();
+
+	D3DXVec3TransformNormal(&vRight, &vRight, &RotationMatrix);
+	D3DXVec3TransformNormal(&vUp, &vUp, &RotationMatrix);
+	D3DXVec3TransformNormal(&vLook, &vLook, &RotationMatrix);
+
+	SetRight(vRight.x, vRight.y, vRight.z);
+	SetUp(vUp.x, vUp.y, vUp.z);
+	SetLook(vLook.x, vLook.y, vLook.z);
 }

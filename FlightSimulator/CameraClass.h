@@ -18,13 +18,17 @@ public:
 	void SetUp(float, float, float);
 	void SetRight(float, float, float);
 
-	D3DXVECTOR3 GetPos();
+	const D3DXVECTOR3 GetRight()& { return D3DXVECTOR3(m_fRightX, m_fRightY, m_fRightZ); }
+	const D3DXVECTOR3 GetUp()& { return D3DXVECTOR3(m_fUpX, m_fUpY, m_fUpZ); }
+	const D3DXVECTOR3 GetLook()& { return D3DXVECTOR3(m_fLookAtX, m_fLookAtY, m_fLookAtZ); }
+	const D3DXVECTOR3 GetPos()& { return D3DXVECTOR3(m_fPositionX, m_fPositionY, m_fPositionZ); }
+
 	D3DXVECTOR3 GetRotation();
 	void GetViewMatrix(D3DXMATRIX&);
 	const D3DXMATRIX& GetView() { return m_matView; }
-	const D3DXMATRIX& GetOrtho() { return m_matView; }
 
 	void MoveCamera(MOVE, float, signed long = 0);
+	void RotateCamera(MOVE, float);
 	void Render();
 
 private:

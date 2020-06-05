@@ -1,5 +1,7 @@
 #include "SystemClass.h"
 
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+
 #define _CRTDBG_MAP_ALLOC
 #include <cstdlib>
 #include <crtdbg.h>

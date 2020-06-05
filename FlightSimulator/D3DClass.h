@@ -30,7 +30,8 @@ public:
 	void GetWorldMatrix(D3DXMATRIX&);
 	void GetOrthoMatrix(D3DXMATRIX&);
 	void GetVideoCardInfo(char*, int&);
-	D3DXMATRIX GetProj() { return m_matProj; }
+	const D3DXMATRIX GetProj() { return m_matProj; }
+	const D3DXMATRIX GetOrtho() { return m_matOrtho; }
 
 	void TurnZBufferOn();
 	void TurnZBufferOff();
