@@ -36,9 +36,9 @@ private:
 	};
 	struct FaceType
 	{
-		int x, y, z;
-		int tu, tv, tz;
-		int nx, ny, nz;
+		int x, y, z, w;
+		int tu, tv, tz, tw;
+		int nx, ny, nz, nw;
 	};
 
 public:
@@ -55,6 +55,8 @@ public:
 	bool Initialize(ID3D11Device*, char*, WCHAR*); 
 	// obj model
 	bool Initialize(ID3D11Device*, WCHAR*, WCHAR*);
+	// RectPolygon Obj Model
+	bool InitializeForRectObj(ID3D11Device*, WCHAR*, WCHAR*);
 	// Terrain model
 	bool InitializeForPlane(ID3D11Device*, WCHAR*);
 	
@@ -78,7 +80,12 @@ private:
 private:
 	bool LoadOBJModel(WCHAR*);
 	bool ReadFileCounts(WCHAR*, ModelCount&);
-	bool LoadDataStructures(WCHAR*, ModelCount);
+
+	bool LoadDataStructures(WCHAR*, ModelCount);	
+	//Rect Polygon Model
+	bool LoadRectOBJModel(WCHAR*);
+	bool LoadRectDataStructures(WCHAR*, ModelCount);
+
 
 private:
 	ID3D11Buffer *m_pVertexBuffer, *m_pIndexBuffer;

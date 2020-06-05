@@ -7,6 +7,10 @@
 
 LightShaderClass::LightShaderClass() 
 {
+	m_pVertexShader = 0;
+	m_pPixelShader = 0;
+	m_pLayout = 0;
+	m_pMatrixBuffer = 0;
 	m_pSampleState = 0;
 	m_pLightBuffer = 0;
 	m_pCameraBuffer = 0;
@@ -95,7 +99,8 @@ bool LightShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 
 	result = D3DX11CompileFromFile(vsFilename, NULL, NULL, "LightVertexShader", "vs_5_0",
 		D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, &vertexShaderBuffer, &errorMessage,
-		NULL);	if (FAILED(result))
+		NULL);
+	if (FAILED(result))
 	{
 		// If the shader failed to compile it should have writen something to the error message.
 		if (errorMessage)
@@ -111,7 +116,8 @@ bool LightShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 	}
 
 	result = D3DX11CompileFromFile(psFilename, NULL, NULL, "LightPixelShader", "ps_5_0",
-		D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, &pixelShaderBuffer, &errorMessage, NULL);	if (FAILED(result))
+		D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, &pixelShaderBuffer, &errorMessage, NULL);
+	if (FAILED(result))
 	{
 		// If the shader failed to compile it should have writen something to the error message.
 		if (errorMessage)
@@ -150,6 +156,7 @@ bool LightShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 	polygonLayout[0].AlignedByteOffset = 0;
 	polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	polygonLayout[0].InstanceDataStepRate = 0;
+
 	polygonLayout[1].SemanticName = "TEXCOORD";
 	polygonLayout[1].SemanticIndex = 0;
 	polygonLayout[1].Format = DXGI_FORMAT_R32G32_FLOAT;
@@ -157,13 +164,15 @@ bool LightShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 	polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 	polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	polygonLayout[1].InstanceDataStepRate = 0;
+
 	polygonLayout[2].SemanticName = "NORMAL";
 	polygonLayout[2].SemanticIndex = 0;
 	polygonLayout[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
 	polygonLayout[2].InputSlot = 0;
 	polygonLayout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 	polygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[2].InstanceDataStepRate = 0;
+	polygonLayout[2].InstanceDataStepRate = 0;
+
 	// Get a count of the elements in the layout.
 	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 	// Create the vertex input layout.
@@ -245,7 +254,6 @@ bool LightShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 	{
 		return false;
 	}
-
 	return true;
 }
 
@@ -433,7 +441,9 @@ void LightShaderClass::RenderShader(ID3D11DeviceContext* deviceContext, int inde
 	deviceContext->PSSetShader(m_pPixelShader, NULL, 0);
 
 	// Set the sampler state in the pixel shader.
-	deviceContext->PSSetSamplers(0, 1, &m_pSampleState);	// Render the triangle.
+	deviceContext->PSSetSamplers(0, 1, &m_pSampleState);
+
+	// Render the triangle.
 	deviceContext->DrawIndexed(indexCount, 0, 0);
 
 	return;

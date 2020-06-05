@@ -93,6 +93,34 @@ bool ModelClass::Initialize(ID3D11Device* device, WCHAR* objFileName, WCHAR* tex
 	return true;
 }
 
+bool ModelClass::InitializeForRectObj(ID3D11Device* device, WCHAR* objFileName, WCHAR* textureFileName)
+{
+	bool result;
+
+	// Load in the model data,
+	result = LoadRectOBJModel(objFileName);
+	if (!result)
+	{
+		return false;
+	}
+
+	// Initialize the vertex and index buffers.
+	result = InitializeBuffersForOBJ(device);
+	if (!result)
+	{
+		return false;
+	}
+
+	// Load the texture for this model.
+	result = LoadTexture(device, textureFileName);
+	if (!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 bool ModelClass::InitializeForPlane(ID3D11Device *device, WCHAR *textureFileName)
 {
 	bool result;
@@ -752,6 +780,275 @@ bool ModelClass::LoadDataStructures(WCHAR* objFileName, ModelCount modelCnt)
 	}
 
 	m_iVertexCount = m_iIndexCount = modelCnt.faceCount * 3;
+
+	m_pModel = new ModelType[m_iVertexCount];
+	if (!m_pModel)
+		return false;
+
+	for (int i = 0; i < m_iVertexCount; i++)
+	{
+		m_pModel[i].x = newVertices[i].x;
+		m_pModel[i].y = newVertices[i].y;
+		m_pModel[i].z = newVertices[i].z;
+
+		m_pModel[i].tu = newTexcoords[i].x;
+		m_pModel[i].tv = newTexcoords[i].y;
+
+		m_pModel[i].nx = newNormals[i].x;
+		m_pModel[i].ny = newNormals[i].y;
+		m_pModel[i].nz = newNormals[i].z;
+	}
+
+
+	delete[] vertices;
+	vertices = 0;
+
+	delete[] texcoords;
+	texcoords = 0;
+
+	delete[] normals;
+	normals = 0;
+
+	delete[] faces;
+	faces = 0;
+
+	delete[] newVertices;
+	vertices = 0;
+
+	delete[] newTexcoords;
+	texcoords = 0;
+
+	delete[] newNormals;
+	normals = 0;
+
+	return true;
+}
+
+bool ModelClass::LoadRectOBJModel(WCHAR *objFileName)
+{
+	bool result;
+
+	ModelCount modelCount;
+	memset(&modelCount, 0, sizeof(modelCount));
+
+	// Load in the model data,
+	result = ReadFileCounts(objFileName, modelCount);
+	if (!result)
+	{
+		return false;
+	}
+
+	// Load the texture for this model.
+	result = LoadRectDataStructures(objFileName, modelCount);
+	if (!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ModelClass::LoadRectDataStructures(WCHAR* objFileName, ModelCount modelCnt)
+{
+	ifstream fin;
+	int vIndex, tIndex, nIndex;
+	char input, input2;
+
+	ModelCount tempCnt;
+	memset(&tempCnt, 0, sizeof(tempCnt));
+
+	OBJType *vertices, *texcoords, *normals;
+
+	vertices = new OBJType[modelCnt.vertexCount];
+	if (!vertices)
+		return false;
+
+	texcoords = new OBJType[modelCnt.textureCount];
+	if (!texcoords)
+		return false;
+
+	normals = new OBJType[modelCnt.normalCount];
+	if (!normals)
+		return false;
+
+	FaceType *faces = new FaceType[modelCnt.faceCount];
+	if (!faces)
+		return false;
+
+	fin.open(objFileName);
+	if (fin.fail() == true)
+		return false;
+
+	fin.get(input);
+	while (!fin.eof())
+	{
+		if (input == 'v')
+		{
+			fin.get(input);
+
+			if (input == ' ')
+			{
+				fin >> vertices[tempCnt.vertexCount].x >> vertices[tempCnt.vertexCount].y >> vertices[tempCnt.vertexCount].z;
+
+				vertices[tempCnt.vertexCount].z = vertices[tempCnt.vertexCount].z * -1.0f;
+				tempCnt.vertexCount++;
+			}
+
+			if (input == 't')
+			{
+				fin >> texcoords[tempCnt.textureCount].x >> texcoords[tempCnt.textureCount].y;
+
+				texcoords[tempCnt.textureCount].y = 1.0f - texcoords[tempCnt.textureCount].y;
+				tempCnt.textureCount++;
+			}
+
+			if (input == 'n')
+			{
+				fin >> normals[tempCnt.normalCount].x >> normals[tempCnt.normalCount].y >> normals[tempCnt.normalCount].z;
+
+				normals[tempCnt.normalCount].z = normals[tempCnt.normalCount].z * -1.0f;
+				tempCnt.normalCount++;
+			}
+		}
+
+		if (input == 'f')
+		{
+			fin.get(input);
+			if (input == ' ')
+			{
+				fin >> faces[tempCnt.faceCount].w >> input2 >> faces[tempCnt.faceCount].tw >> input2 >> faces[tempCnt.faceCount].nw
+					>> faces[tempCnt.faceCount].z >> input2 >> faces[tempCnt.faceCount].tz >> input2 >> faces[tempCnt.faceCount].nz
+					>> faces[tempCnt.faceCount].y >> input2 >> faces[tempCnt.faceCount].tv >> input2 >> faces[tempCnt.faceCount].ny
+					>> faces[tempCnt.faceCount].x >> input2 >> faces[tempCnt.faceCount].tu >> input2 >> faces[tempCnt.faceCount].nx;
+				tempCnt.faceCount++;
+			}
+		}
+
+		while (input != '\n')
+		{
+			fin.get(input);
+		}
+
+		fin.get(input);
+	}
+
+	fin.close();
+
+	OBJType *newVertices, *newTexcoords, *newNormals;
+
+	newVertices = new OBJType[tempCnt.faceCount * 6];
+	if (!newVertices)
+		return false;
+
+	newTexcoords = new OBJType[tempCnt.faceCount * 6];
+	if (!newTexcoords)
+		return false;
+
+	newNormals = new OBJType[tempCnt.faceCount * 6];
+	if (!newNormals)
+		return false;
+
+	int index = 0;
+	for (int i = 0; i < tempCnt.faceCount; i++)
+	{
+		index = 6 * i;
+		vIndex = faces[i].x - 1;
+		tIndex = faces[i].tu - 1;
+		nIndex = faces[i].nx - 1;
+
+		newVertices[index].x = vertices[vIndex].x;
+		newVertices[index].y = vertices[vIndex].y;
+		newVertices[index].z = vertices[vIndex].z;
+
+		newTexcoords[index].x = texcoords[tIndex].x;
+		newTexcoords[index].y = texcoords[tIndex].y;
+
+		newNormals[index].x = normals[nIndex].x;
+		newNormals[index].y = normals[nIndex].y;
+		newNormals[index].z = normals[nIndex].z;
+
+		index = 6 * i + 1;
+		vIndex = faces[i].y - 1;
+		tIndex = faces[i].tv - 1;
+		nIndex = faces[i].ny - 1;
+
+		newVertices[index].x = vertices[vIndex].x;
+		newVertices[index].y = vertices[vIndex].y;
+		newVertices[index].z = vertices[vIndex].z;
+
+		newTexcoords[index].x = texcoords[tIndex].x;
+		newTexcoords[index].y = texcoords[tIndex].y;
+
+		newNormals[index].x = normals[nIndex].x;
+		newNormals[index].y = normals[nIndex].y;
+		newNormals[index].z = normals[nIndex].z;
+
+		index = 6 * i + 2;
+		vIndex = faces[i].z - 1;
+		tIndex = faces[i].tz - 1;
+		nIndex = faces[i].nz - 1;
+
+		newVertices[index].x = vertices[vIndex].x;
+		newVertices[index].y = vertices[vIndex].y;
+		newVertices[index].z = vertices[vIndex].z;
+
+		newTexcoords[index].x = texcoords[tIndex].x;
+		newTexcoords[index].y = texcoords[tIndex].y;
+
+		newNormals[index].x = normals[nIndex].x;
+		newNormals[index].y = normals[nIndex].y;
+		newNormals[index].z = normals[nIndex].z;
+
+		index = 6 * i + 3;
+		vIndex = faces[i].x - 1;
+		tIndex = faces[i].tu - 1;
+		nIndex = faces[i].nz - 1;
+
+		newVertices[index].x = vertices[vIndex].x;
+		newVertices[index].y = vertices[vIndex].y;
+		newVertices[index].z = vertices[vIndex].z;
+
+		newTexcoords[index].x = texcoords[tIndex].x;
+		newTexcoords[index].y = texcoords[tIndex].y;
+
+		newNormals[index].x = normals[nIndex].x;
+		newNormals[index].y = normals[nIndex].y;
+		newNormals[index].z = normals[nIndex].z;
+
+		index = 6 * i + 4;
+		vIndex = faces[i].z - 1;
+		tIndex = faces[i].tz - 1;
+		nIndex = faces[i].nz - 1;
+
+		newVertices[index].x = vertices[vIndex].x;
+		newVertices[index].y = vertices[vIndex].y;
+		newVertices[index].z = vertices[vIndex].z;
+
+		newTexcoords[index].x = texcoords[tIndex].x;
+		newTexcoords[index].y = texcoords[tIndex].y;
+
+		newNormals[index].x = normals[nIndex].x;
+		newNormals[index].y = normals[nIndex].y;
+		newNormals[index].z = normals[nIndex].z;
+
+		index = 6 * i + 5;
+		vIndex = faces[i].w - 1;
+		tIndex = faces[i].tw - 1;
+		nIndex = faces[i].nw - 1;
+
+		newVertices[index].x = vertices[vIndex].x;
+		newVertices[index].y = vertices[vIndex].y;
+		newVertices[index].z = vertices[vIndex].z;
+
+		newTexcoords[index].x = texcoords[tIndex].x;
+		newTexcoords[index].y = texcoords[tIndex].y;
+
+		newNormals[index].x = normals[nIndex].x;
+		newNormals[index].y = normals[nIndex].y;
+		newNormals[index].z = normals[nIndex].z;
+	}
+
+	m_iVertexCount = m_iIndexCount = modelCnt.faceCount * 6;
 
 	m_pModel = new ModelType[m_iVertexCount];
 	if (!m_pModel)
