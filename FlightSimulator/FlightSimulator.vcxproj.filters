@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="WinMain">
+      <UniqueIdentifier>{c07891d8-e3ea-4642-ad4e-e7ace4c4fdb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass">
+      <UniqueIdentifier>{dc94dd65-01b7-4289-8b98-6e1ed4827015}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\InputClass">
+      <UniqueIdentifier>{823a2a31-278a-49ae-8fa1-32992caddb3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\GraphicsClass">
+      <UniqueIdentifier>{f0b5c49e-2066-47ab-8323-990e0fec4cac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\GraphicsClass\D3DClass">
+      <UniqueIdentifier>{e2f32b64-9f78-4353-a2c3-178a81acda63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\GraphicsClass\CameraClass">
+      <UniqueIdentifier>{ec50ef38-c363-4124-b244-d184bbb5e5dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\GraphicsClass\ModelClass">
+      <UniqueIdentifier>{81424c85-0696-4578-a204-0a4233c295d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\GraphicsClass\ColorShaderClass">
+      <UniqueIdentifier>{d80be794-c5d0-4d3e-96e5-749b0cba8f38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\GraphicsClass\ColorShaderClass\ColorShader">
+      <UniqueIdentifier>{2f572ee0-16e8-45aa-bb69-8d73d96fc1bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\GraphicsClass\ModelClass\TextureClass">
+      <UniqueIdentifier>{7a6d9c04-8c1c-4cbe-8053-158af232de60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\GraphicsClass\TextureShaderClass">
+      <UniqueIdentifier>{de77ae36-4355-4a88-be7c-a2bb1f0e3dfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\GraphicsClass\TextureShaderClass\TextureShader">
+      <UniqueIdentifier>{180e0171-c790-4d5d-9e2c-18da7cd36e8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\GraphicsClass\LightClass">
+      <UniqueIdentifier>{87100105-cc81-4f4b-ad95-76dab1437781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\GraphicsClass\LightShaderClass">
+      <UniqueIdentifier>{57d6fa34-3ac8-4fe6-b14a-068ce48ff2ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\GraphicsClass\LightShaderClass\LightShader">
+      <UniqueIdentifier>{a6a16404-3a9a-4465-959e-f107f7a7bdf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\GraphicsClass\BitmapClass">
+      <UniqueIdentifier>{bf845420-9a64-48be-904d-c926563b8040}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\GraphicsClass\TextClass">
+      <UniqueIdentifier>{6eab4044-a713-4aba-8ca7-96935d0eeda8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\GraphicsClass\TextClass\FontClass">
+      <UniqueIdentifier>{e88b4f73-a257-4499-bda3-9ed6078db34d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\GraphicsClass\TextClass\FontShaderClass">
+      <UniqueIdentifier>{2a2c083d-3e8f-4c6f-a692-bdcc1f78a65f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\GraphicsClass\TextClass\FontShaderClass\FontShader">
+      <UniqueIdentifier>{7f8bd8a0-09ee-4a29-b2f4-76575a7a7281}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\FpsClass">
+      <UniqueIdentifier>{8cea9d21-9bc8-40cd-9566-7fc668d9a4b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\CpuClass">
+      <UniqueIdentifier>{7d61445a-68a3-490e-9fc2-f62917d1e134}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\SystemClass\TimerClass">
+      <UniqueIdentifier>{0246cf64-91a6-49a4-ade3-22833521e89d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\ManagerClass">
+      <UniqueIdentifier>{c8c7301b-54b5-43d7-9f08-8895fd84537d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\ManagerClass\GameObjectMgr">
+      <UniqueIdentifier>{5ac150bb-db4a-4827-ba07-51aab76142fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\ManagerClass\GameObjectMgr\GameObject">
+      <UniqueIdentifier>{fd92365b-7734-4b1f-b358-dc46cbefc432}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\ManagerClass\CollisionMgr">
+      <UniqueIdentifier>{1c65da95-8e40-45cc-86be-34641b871094}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\ManagerClass\CollisionMgr\Collision">
+      <UniqueIdentifier>{11cf4911-778b-40fc-9606-9944e3e61ffc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\ClientClass">
+      <UniqueIdentifier>{0bd28f22-1e71-4d89-817e-a956fb30e09f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\ClientClass\Player">
+      <UniqueIdentifier>{1a12a805-2fd0-4f81-8a6b-615ff603e0e2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="InputClass.cpp">
+      <Filter>WinMain\SystemClass\InputClass</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemClass.cpp">
+      <Filter>WinMain\SystemClass</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsClass.cpp">
+      <Filter>WinMain\SystemClass\GraphicsClass</Filter>
+    </ClCompile>
+    <ClCompile Include="D3DClass.cpp">
+      <Filter>WinMain\SystemClass\GraphicsClass\D3DClass</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraClass.cpp">
+      <Filter>WinMain\SystemClass\GraphicsClass\CameraClass</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelClass.cpp">
+      <Filter>WinMain\SystemClass\GraphicsClass\ModelClass</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorShaderClass.cpp">
+      <Filter>WinMain\SystemClass\GraphicsClass\ColorShaderClass</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureClass.cpp">
+      <Filter>WinMain\SystemClass\GraphicsClass\ModelClass\TextureClass</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureShaderClass.cpp">
+      <Filter>WinMain\SystemClass\GraphicsClass\TextureShaderClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>WinMain</Filter>
+    </ClCompile>
+    <ClCompile Include="LightClass.cpp">
+      <Filter>WinMain\SystemClass\GraphicsClass\LightClass</Filter>
+    </ClCompile>
+    <ClCompile Include="LightShaderClass.cpp">
+      <Filter>WinMain\SystemClass\GraphicsClass\LightShaderClass</Filter>
+    </ClCompile>
+    <ClCompile Include="BitmapClass.cpp">
+      <Filter>WinMain\SystemClass\GraphicsClass\BitmapClass</Filter>
+    </ClCompile>
+    <ClCompile Include="FontClass.cpp">
+      <Filter>WinMain\SystemClass\GraphicsClass\TextClass\FontClass</Filter>
+    </ClCompile>
+    <ClCompile Include="FontShaderClass.cpp">
+      <Filter>WinMain\SystemClass\GraphicsClass\TextClass\FontShaderClass</Filter>
+    </ClCompile>
+    <ClCompile Include="TextClass.cpp">
+      <Filter>WinMain\SystemClass\GraphicsClass\TextClass</Filter>
+    </ClCompile>
+    <ClCompile Include="FpsClass.cpp">
+      <Filter>WinMain\SystemClass\FpsClass</Filter>
+    </ClCompile>
+    <ClCompile Include="CpuClass.cpp">
+      <Filter>WinMain\SystemClass\CpuClass</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerClass.cpp">
+      <Filter>WinMain\SystemClass\TimerClass</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>WinMain\ManagerClass\GameObjectMgr\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectMgr.cpp">
+      <Filter>WinMain\ManagerClass\GameObjectMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>WinMain\ClientClass\Player</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="InputClass.h">
+      <Filter>WinMain\SystemClass\InputClass</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemClass.h">
+      <Filter>WinMain\SystemClass</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsClass.h">
+      <Filter>WinMain\SystemClass\GraphicsClass</Filter>
+    </ClInclude>
+    <ClInclude Include="D3DClass.h">
+      <Filter>WinMain\SystemClass\GraphicsClass\D3DClass</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraClass.h">
+      <Filter>WinMain\SystemClass\GraphicsClass\CameraClass</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelClass.h">
+      <Filter>WinMain\SystemClass\GraphicsClass\ModelClass</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorShaderClass.h">
+      <Filter>WinMain\SystemClass\GraphicsClass\ColorShaderClass</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureClass.h">
+      <Filter>WinMain\SystemClass\GraphicsClass\ModelClass\TextureClass</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureShaderClass.h">
+      <Filter>WinMain\SystemClass\GraphicsClass\TextureShaderClass</Filter>
+    </ClInclude>
+    <ClInclude Include="LightClass.h">
+      <Filter>WinMain\SystemClass\GraphicsClass\LightClass</Filter>
+    </ClInclude>
+    <ClInclude Include="LightShaderClass.h">
+      <Filter>WinMain\SystemClass\GraphicsClass\LightShaderClass</Filter>
+    </ClInclude>
+    <ClInclude Include="BitmapClass.h">
+      <Filter>WinMain\SystemClass\GraphicsClass\BitmapClass</Filter>
+    </ClInclude>
+    <ClInclude Include="FontClass.h">
+      <Filter>WinMain\SystemClass\GraphicsClass\TextClass\FontClass</Filter>
+    </ClInclude>
+    <ClInclude Include="FontShaderClass.h">
+      <Filter>WinMain\SystemClass\GraphicsClass\TextClass\FontShaderClass</Filter>
+    </ClInclude>
+    <ClInclude Include="TextClass.h">
+      <Filter>WinMain\SystemClass\GraphicsClass\TextClass</Filter>
+    </ClInclude>
+    <ClInclude Include="FpsClass.h">
+      <Filter>WinMain\SystemClass\FpsClass</Filter>
+    </ClInclude>
+    <ClInclude Include="CpuClass.h">
+      <Filter>WinMain\SystemClass\CpuClass</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerClass.h">
+      <Filter>WinMain\SystemClass\TimerClass</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>WinMain\ManagerClass\GameObjectMgr\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectMgr.h">
+      <Filter>WinMain\ManagerClass\GameObjectMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>WinMain\ClientClass\Player</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Engine\Color.ps">
+      <Filter>WinMain\SystemClass\GraphicsClass\ColorShaderClass\ColorShader</Filter>
+    </None>
+    <None Include="..\Engine\Color.vs">
+      <Filter>WinMain\SystemClass\GraphicsClass\ColorShaderClass\ColorShader</Filter>
+    </None>
+    <None Include="..\Engine\Texture.ps">
+      <Filter>WinMain\SystemClass\GraphicsClass\TextureShaderClass\TextureShader</Filter>
+    </None>
+    <None Include="..\Engine\Texture.vs">
+      <Filter>WinMain\SystemClass\GraphicsClass\TextureShaderClass\TextureShader</Filter>
+    </None>
+    <None Include="..\Engine\Light.ps">
+      <Filter>WinMain\SystemClass\GraphicsClass\LightShaderClass\LightShader</Filter>
+    </None>
+    <None Include="..\Engine\Light.vs">
+      <Filter>WinMain\SystemClass\GraphicsClass\LightShaderClass\LightShader</Filter>
+    </None>
+    <None Include="..\Engine\Font.vs">
+      <Filter>WinMain\SystemClass\GraphicsClass\TextClass\FontShaderClass\FontShader</Filter>
+    </None>
+    <None Include="..\Engine\Font.ps">
+      <Filter>WinMain\SystemClass\GraphicsClass\TextClass\FontShaderClass\FontShader</Filter>
+    </None>
+  </ItemGroup>
+</Project>
