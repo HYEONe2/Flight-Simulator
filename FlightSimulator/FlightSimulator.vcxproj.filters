@@ -91,6 +91,9 @@
     <Filter Include="WinMain\ClientClass\Player">
       <UniqueIdentifier>{1a12a805-2fd0-4f81-8a6b-615ff603e0e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WinMain\ClientClass\Planet">
+      <UniqueIdentifier>{4498536e-6764-4661-8487-5f1659f7ecf4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputClass.cpp">
@@ -159,6 +162,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>WinMain\ClientClass\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Planet.cpp">
+      <Filter>WinMain\ClientClass\Planet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InputClass.h">
@@ -223,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>WinMain\ClientClass\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Planet.h">
+      <Filter>WinMain\ClientClass\Planet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
