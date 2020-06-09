@@ -32,6 +32,8 @@ void Player::Init(CameraClass *pCamera, InputClass *pInput)
 {
 	m_pCamera = pCamera;
 	m_pInput = pInput;
+	m_pCamera->SetPos( 650.f, 0.f, -600.f );
+	
 }
 
 void Player::InitBitmap(ID3D11Device* device, int screenWidth, int screenHeight, WCHAR* textureFilename)
@@ -49,8 +51,8 @@ void Player::InitBitmap(ID3D11Device* device, int screenWidth, int screenHeight,
 bool Player::Frame(float fFrameTime)
 {
 	Move(fFrameTime);
-	cout << m_fRotSpeed << endl;
-
+	//cout << m_fRotSpeed << endl;
+	//cout << GetPos().x<< " ,"<<GetPos().z << endl;
 	return true;
 }
 
@@ -127,7 +129,7 @@ void Player::Move(float fFrameTime)
 
 	if (MouseMove = m_pInput->GetDIMouseMove(InputClass::DIMM_X))
 	{
-		m_pCamera->MoveCamera(CameraClass::MOVE_MOUSEX, fFrameTime * 0.1f, MouseMove);
+		m_pCamera->MoveCamera(CameraClass::MOVE_MOUSEX, fFrameTime * 0.2f, MouseMove);
 	}
 
 	if (MouseMove = m_pInput->GetDIMouseMove(InputClass::DIMM_Y))

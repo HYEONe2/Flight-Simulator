@@ -179,7 +179,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_pGameObjectMgr->PushGameObject(pMars);
 
 	GameObject* pJupiter = new Planet;
-	dynamic_cast<Planet*>(pJupiter)->Init(1200.f, 0.6f);
+	dynamic_cast<Planet*>(pJupiter)->Init(700.f, 0.3f);
 	pJupiter->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Jupiter/13905_Jupiter_V1_l3.obj", L"../Engine/data/Jupiter/Jupiter_diff.jpg");
 	iPolyCnt += (pJupiter->GetVertexCount() / 3);
 	m_pGameObjectMgr->PushGameObject(pJupiter);

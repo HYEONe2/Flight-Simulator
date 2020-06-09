@@ -42,7 +42,7 @@ private:
 	int m_iScreenHeight;
 
 	float m_fSpeed = 0.f;
-	float m_fMaxSpeed = 1.5f;
+	float m_fMaxSpeed = 3.5f;
 
 	float m_fRotSpeed = 0.f;
 	float m_fRotSpeedL = 0.f;
