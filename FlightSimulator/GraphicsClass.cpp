@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Player.h"
 #include "Planet.h"
+#include "Skybox.h"
 
 
 GraphicsClass::GraphicsClass()
@@ -129,77 +130,68 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 
 	m_pLight->SetDirection(0.f, -1.f, 0.f);
-	m_pLight->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.f);
+	m_pLight->SetAmbientColor(0.3f, 0.3f, 0.3f, 1.f);
 	m_pLight->SetDiffuseColor(1.f, 1.f, 1.f, 1.f);
 	m_pLight->SetSpecularColor(1.f, 1.f, 1.f, 1.f);
 	m_pLight->SetSpecularPower(32.f);
 
 	m_pGameObjectMgr = new GameObjectMgr;
 	if (!m_pGameObjectMgr)
-	{
 		return false;
-	}
 
-	GameObject* pPlayer = new Player;
-	dynamic_cast<Player*>(pPlayer)->InitBitmap(m_pD3D->GetDevice(), screenWidth, screenHeight, L"../Engine/data/Player/Player.png");
-	dynamic_cast<Player*>(pPlayer)->Init(m_pCamera, m_pInputClass);
-	iPolyCnt += (pPlayer->GetVertexCount() / 3);
+	GameObject* pGameObject = nullptr;
+	
+	pGameObject = new Skybox;
+	pGameObject->InitializeForCube(m_pD3D->GetDevice(), "../Engine/data/Cube.txt", L"../Engine/data/Skybox.jpg");
+	dynamic_cast<Skybox*>(pGameObject)->SetD3D(m_pD3D);
+	dynamic_cast<Skybox*>(pGameObject)->SetCamera(m_pCamera);
+	iPolyCnt += (pGameObject->GetVertexCount() / 3);
+	m_pGameObjectMgr->PushGameObject(pGameObject);
 
-	m_pGameObjectMgr->PushGameObject(pPlayer);
+	pGameObject = new Planet;
+	dynamic_cast<Planet*>(pGameObject)->Init(10.f);
+	pGameObject->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Moon/Moon 2K.obj", L"../Engine/data/Moon/Diffuse_2K.png");
+	iPolyCnt += (pGameObject->GetVertexCount() / 3);
+	m_pGameObjectMgr->PushGameObject(pGameObject);
 
+	pGameObject = new Planet;
+	dynamic_cast<Planet*>(pGameObject)->Init(50.f);
+	pGameObject->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Mercury/Mercury 1K.obj", L"../Engine/data/Mercury/Diffuse_1K.png");
+	iPolyCnt += (pGameObject->GetVertexCount() / 3);
+	m_pGameObjectMgr->PushGameObject(pGameObject);
 
-	GameObject* pMoon = new Planet;
-	dynamic_cast<Planet*>(pMoon)->Init(10.f);
-	pMoon->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Moon/Moon 2K.obj", L"../Engine/data/Moon/Diffuse_2K.png");
-	iPolyCnt += (pMoon->GetVertexCount() / 3);
-	m_pGameObjectMgr->PushGameObject(pMoon);
+	pGameObject = new Planet;
+	dynamic_cast<Planet*>(pGameObject)->Init(110.f);
+	pGameObject->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Venus/Venus_1K.obj", L"../Engine/data/Venus/Atmosphere_2K.png");
+	iPolyCnt += (pGameObject->GetVertexCount() / 3);
+	m_pGameObjectMgr->PushGameObject(pGameObject);
 
-	GameObject* pMercury = new Planet;
-	dynamic_cast<Planet*>(pMercury)->Init(50.f);
-	pMercury->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Mercury/Mercury 1K.obj", L"../Engine/data/Mercury/Diffuse_1K.png");
-	iPolyCnt += (pMercury->GetVertexCount() / 3);
-	m_pGameObjectMgr->PushGameObject(pMercury);
+	pGameObject = new Planet;
+	dynamic_cast<Planet*>(pGameObject)->Init(210.f);
+	pGameObject->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Earth/Earth 2K.obj", L"../Engine/data/Earth/Diffuse_2K.png");
+	iPolyCnt += (pGameObject->GetVertexCount() / 3);
+	m_pGameObjectMgr->PushGameObject(pGameObject);
 
-	GameObject* pVenus = new Planet;
-	dynamic_cast<Planet*>(pVenus)->Init(110.f);
-	pVenus->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Venus/Venus_1K.obj", L"../Engine/data/Venus/Atmosphere_2K.png");
-	iPolyCnt += (pVenus->GetVertexCount() / 3);
-	m_pGameObjectMgr->PushGameObject(pVenus);
+	pGameObject = new Planet;
+	dynamic_cast<Planet*>(pGameObject)->Init(410.f);
+	pGameObject->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Mars/Mars 2K.obj", L"../Engine/data/Mars/Diffuse_2K.png");
+	iPolyCnt += (pGameObject->GetVertexCount() / 3);
+	m_pGameObjectMgr->PushGameObject(pGameObject);
 
-	GameObject* pEarth = new Planet;
-	dynamic_cast<Planet*>(pEarth)->Init(210.f);
-	pEarth->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Earth/Earth 2K.obj", L"../Engine/data/Earth/Diffuse_2K.png");
-	iPolyCnt += (pEarth->GetVertexCount() / 3);
-	m_pGameObjectMgr->PushGameObject(pEarth);
+	pGameObject = new Planet;
+	dynamic_cast<Planet*>(pGameObject)->Init(700.f, 0.3f);
+	pGameObject->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Jupiter/13905_Jupiter_V1_l3.obj", L"../Engine/data/Jupiter/Jupiter_diff.jpg");
+	iPolyCnt += (pGameObject->GetVertexCount() / 3);
+	m_pGameObjectMgr->PushGameObject(pGameObject);
+	
+	pGameObject = new Player;
+	dynamic_cast<Player*>(pGameObject)->Init(m_pCamera, m_pInputClass);
+	dynamic_cast<Player*>(pGameObject)->InitCockPit(m_pD3D->GetDevice(), L"../Engine/data/Player/Player.png");
+	iPolyCnt += (pGameObject->GetVertexCount() / 3);
+	m_pGameObjectMgr->PushGameObject(pGameObject);
 
-	GameObject* pMars = new Planet;
-	dynamic_cast<Planet*>(pMars)->Init(410.f);
-	pMars->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Mars/Mars 2K.obj", L"../Engine/data/Mars/Diffuse_2K.png");
-	iPolyCnt += (pMars->GetVertexCount() / 3);
-	m_pGameObjectMgr->PushGameObject(pMars);
-
-	GameObject* pJupiter = new Planet;
-	dynamic_cast<Planet*>(pJupiter)->Init(700.f, 0.3f);
-	pJupiter->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Jupiter/13905_Jupiter_V1_l3.obj", L"../Engine/data/Jupiter/Jupiter_diff.jpg");
-	iPolyCnt += (pJupiter->GetVertexCount() / 3);
-	m_pGameObjectMgr->PushGameObject(pJupiter);
-
-
-	m_pGameObjectMgr->PushGameObject(m_pPlane);
-	m_pGameObjectMgr->PushGameObject(m_pMonokumaModel);
-	m_Bitmap = new BitmapClass;
-	if (!m_Bitmap)
-	{
-		return false;
-	}
-	// Initialize the bitmap object.
-	result = m_Bitmap->Initialize(m_pD3D->GetDevice(), screenWidth, screenHeight,
-		L"../Engine/data/Player/Player.png", 200, 200);
-	if (!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the bitmap object.", L"Error", MB_OK);
-		return false;
-	}
+	//m_pGameObjectMgr->PushGameObject(m_pPlane);
+	//m_pGameObjectMgr->PushGameObject(m_pMonokumaModel);
 
 	return true;
 }

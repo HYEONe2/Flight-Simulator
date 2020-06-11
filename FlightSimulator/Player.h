@@ -6,7 +6,8 @@
 class D3DClass;
 class BitmapClass;
 class InputClass;
-class TextureShaderClass;
+class LightShaderClass;
+class LightClass;
 
 class Player :
 	public GameObject
@@ -23,10 +24,10 @@ public:
 public:
 	void Init();
 	void Init(CameraClass*, InputClass*);
-	void InitBitmap(ID3D11Device*, int, int, WCHAR*);
+	void InitCockPit(ID3D11Device*, WCHAR*);
 
 	virtual bool Frame(float);
-	void RenderBitmap(D3DClass*, TextureShaderClass*);
+	void RenderCockpit(D3DClass*, LightShaderClass*, LightClass*);
 	void Shutdown();
 
 private:
@@ -34,7 +35,7 @@ private:
 	void CheckSpeed(CameraClass::MOVE, float, bool = false);
 
 private:
-	BitmapClass* m_pBitmap;
+	ModelClass* m_pCockpit;
 	CameraClass* m_pCamera;
 	InputClass* m_pInput;
 
@@ -42,7 +43,7 @@ private:
 	int m_iScreenHeight;
 
 	float m_fSpeed = 0.f;
-	float m_fMaxSpeed = 3.5f;
+	float m_fMaxSpeed = 5.f;
 
 	float m_fRotSpeed = 0.f;
 	float m_fRotSpeedL = 0.f;

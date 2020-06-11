@@ -94,6 +94,9 @@
     <Filter Include="WinMain\ClientClass\Planet">
       <UniqueIdentifier>{23b9c902-a94d-4a18-9cb7-37c252cf9a31}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WinMain\ClientClass\Skybox">
+      <UniqueIdentifier>{ae458656-a6de-4a2a-bd6e-1f3113bea122}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputClass.cpp">
@@ -165,6 +168,9 @@
     <ClCompile Include="Planet.cpp">
       <Filter>WinMain\ClientClass\Planet</Filter>
     </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>WinMain\ClientClass\Skybox</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InputClass.h">
@@ -232,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="Planet.h">
       <Filter>WinMain\ClientClass\Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>WinMain\ClientClass\Skybox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

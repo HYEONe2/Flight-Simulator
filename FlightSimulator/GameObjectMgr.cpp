@@ -8,6 +8,10 @@
 #include "TextureShaderClass.h"
 
 #include "Player.h"
+#include "Skybox.h"
+
+#include <iostream>
+using namespace std;
 
 GameObjectMgr::GameObjectMgr()
 {
@@ -51,9 +55,34 @@ void GameObjectMgr::Render(D3DClass * pD3D, LightShaderClass* pLightShader, Text
 
 	for (auto iter : m_GameObjectLst)
 	{
-		if (!iter->GetTexture())
+		if (iter->GetTag() == GameObject::TAG_SKYBOX)
 		{
-			dynamic_cast<Player*>(iter)->RenderBitmap(pD3D, pTextureShader);
+			ID3D11RasterizerState* pRasterState;
+			pD3D->GetDeviceContext()->RSGetState(&pRasterState);
+
+			D3D11_RASTERIZER_DESC rasterDesc;
+			pRasterState->GetDesc(&rasterDesc);
+
+			rasterDesc.CullMode = D3D11_CULL_NONE;
+			pD3D->GetDevice()->CreateRasterizerState(&rasterDesc, &pRasterState);
+			pD3D->GetDeviceContext()->RSSetState(pRasterState);
+		}
+		else
+		{
+			ID3D11RasterizerState* pRasterState;
+			pD3D->GetDeviceContext()->RSGetState(&pRasterState);
+
+			D3D11_RASTERIZER_DESC rasterDesc;
+			pRasterState->GetDesc(&rasterDesc);
+
+			rasterDesc.CullMode = D3D11_CULL_BACK;
+			pD3D->GetDevice()->CreateRasterizerState(&rasterDesc, &pRasterState);
+			pD3D->GetDeviceContext()->RSSetState(pRasterState);
+		}
+
+		if (iter->GetTag() == GameObject::TAG_PLAYER)
+		{
+			dynamic_cast<Player*>(iter)->RenderCockpit(pD3D, pLightShader, pLight);
 			continue;
 		}
 

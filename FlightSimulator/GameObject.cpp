@@ -45,6 +45,7 @@ void GameObject::SetLook(D3DXVECTOR3 vLook)
 void GameObject::Init()
 {
 	D3DXMatrixIdentity(&m_matWorld);
+	m_eTag = TAG_END;
 }
 
 bool GameObject::Frame(float fFrameTime)

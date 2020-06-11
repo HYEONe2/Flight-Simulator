@@ -3,10 +3,8 @@
 #include "D3DClass.h"
 #include "BitmapClass.h"
 #include "InputClass.h"
-#include "TextureShaderClass.h"
-
-#include <iostream>
-using namespace std;
+#include "LightShaderClass.h"
+#include "LightClass.h"
 
 Player::Player()
 {
@@ -30,64 +28,58 @@ void Player::Init()
 
 void Player::Init(CameraClass *pCamera, InputClass *pInput)
 {
-	m_pCamera = pCamera;
 	m_pInput = pInput;
+	m_pCamera = pCamera;
 	m_pCamera->SetPos( 650.f, 0.f, -600.f );
 	
+	m_eTag = TAG_PLAYER;
 }
 
-void Player::InitBitmap(ID3D11Device* device, int screenWidth, int screenHeight, WCHAR* textureFilename)
+void Player::InitCockPit(ID3D11Device *device, WCHAR * wstrFileName)
 {
-	if (m_pBitmap)
-		return;
-
-	m_iScreenWidth = screenWidth;
-	m_iScreenHeight = screenHeight;
-
-	m_pBitmap = new BitmapClass;
-	m_pBitmap->Initialize(device, m_iScreenWidth, m_iScreenHeight, textureFilename);
+	m_pCockpit = new ModelClass;
+	m_pCockpit->Initialize(device, wstrFileName);
 }
 
 bool Player::Frame(float fFrameTime)
 {
 	Move(fFrameTime);
-	//cout << m_fRotSpeed << endl;
-	//cout << GetPos().x<< " ,"<<GetPos().z << endl;
+
 	return true;
 }
 
-void Player::RenderBitmap(D3DClass* pD3D, TextureShaderClass* pTextureShader)
+void Player::RenderCockpit(D3DClass* pD3D, LightShaderClass* pLightShader, LightClass* pLight)
 {
-	if (!m_pBitmap)
-		return;
-
 	m_pCamera->Render();
 
-	//pD3D->TurnZBufferOff();
-	//pD3D->TurnOnAlphaBlending();
+	D3DXMATRIX matScale;
+	D3DXMatrixScaling(&matScale, 0.7f, 0.45f, 0.7f);
+	D3DXVECTOR3 vDir = { m_pCamera->GetLook().x, m_pCamera->GetLook().y, m_pCamera->GetLook().z };
+	D3DXVec3Normalize(&vDir, &vDir);
 
-	//m_pBitmap->Render(pD3D->GetDeviceContext(), 0, 0);
+	D3DXMATRIX matBill = m_pCamera->GetView();
+	D3DXMatrixInverse(&matBill, NULL, &matBill);
+	matBill = matScale * matBill;
+	matBill._41 = m_matWorld._41 + vDir.x;
+	matBill._42 = m_matWorld._42 + vDir.y;
+	matBill._43 = m_matWorld._43 + vDir.z;
 
-	////D3DXMATRIX matBill;
-	////D3DXMatrixIdentity(&matBill);
-	////matBill = m_pCamera->GetView();
-	////ZeroMemory(&matBill.m[3][0], sizeof(D3DXVECTOR3));
-	////D3DXMatrixInverse(&matBill, 0, &matBill);
-	////matBill = matBill * m_matWorld;
-	//pTextureShader->Render(pD3D->GetDeviceContext(), m_pBitmap->GetIndexCount(),
-	//	m_matWorld, m_pCamera->GetView(), pD3D->GetOrtho(), m_pBitmap->GetTexture());
+	pD3D->TurnOnAlphaBlending();
 
-	//pD3D->TurnOffAlphaBlending();
-	//pD3D->TurnZBufferOn();
+	m_pCockpit->Render(pD3D->GetDeviceContext());
+	pLightShader->Render(pD3D->GetDeviceContext(), m_pCockpit->GetIndexCount(), matBill, m_pCamera->GetView(),
+		pD3D->GetProj(), m_pCockpit->GetTexture(), pLight->GetDirection(), pLight->GetAmbientColor(),
+		pLight->GetDiffuseColor(), m_pCamera->GetPos(), pLight->GetSpecularColor(), pLight->GetSpecularPower());
+	
+	pD3D->TurnOffAlphaBlending();
 }
 
 void Player::Shutdown()
 {
-	if (m_pBitmap)
+	if (m_pCockpit)
 	{
-		m_pBitmap->Shutdown();
-		delete m_pBitmap;
-		m_pBitmap = 0;
+		delete m_pCockpit;
+		m_pCockpit = 0;
 	}
 }
 
@@ -137,9 +129,10 @@ void Player::Move(float fFrameTime)
 		m_pCamera->MoveCamera(CameraClass::MOVE_MOUSEY, fFrameTime* 0.1f, MouseMove);
 	}
 
-	m_matWorld._41 = m_pCamera->GetPos().x;
-	m_matWorld._42 = m_pCamera->GetPos().y;
-	m_matWorld._43 = m_pCamera->GetPos().z;
+	SetRight(m_pCamera->GetRight());
+	SetUp(m_pCamera->GetUp());
+	SetLook(m_pCamera->GetLook());
+	SetPos(m_pCamera->GetPos());
 }
 
 void Player::CheckSpeed(CameraClass::MOVE eMove, float fFrameTime, bool bCheck)

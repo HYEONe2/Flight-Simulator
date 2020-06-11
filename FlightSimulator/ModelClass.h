@@ -52,13 +52,14 @@ public:
 	virtual ~ModelClass();
 
 	bool Initialize(ID3D11Device*, WCHAR*);
-	bool Initialize(ID3D11Device*, char*, WCHAR*); 
+	bool InitializeForCube(ID3D11Device*, char*, WCHAR*); 
 	// obj model
 	bool Initialize(ID3D11Device*, WCHAR*, WCHAR*);
 	// RectPolygon Obj Model
 	bool InitializeForRectObj(ID3D11Device*, WCHAR*, WCHAR*);
 	// Terrain model
 	bool InitializeForPlane(ID3D11Device*, WCHAR*);
+	bool InitializeForCube(ID3D11Device*, WCHAR*);
 	
 public:
 	void Render(ID3D11DeviceContext*);
@@ -74,6 +75,7 @@ private:
 	bool InitializeBuffers(ID3D11Device*);
 	bool InitializeBuffersForOBJ(ID3D11Device*);
 	bool InitializeBuffersForPlane(ID3D11Device*);
+	bool InitializeBuffersForCube(ID3D11Device*);
 	void ShutdownBuffers();
 	void RenderBuffers(ID3D11DeviceContext*);
 

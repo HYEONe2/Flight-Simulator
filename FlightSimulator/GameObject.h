@@ -5,14 +5,18 @@ class GameObject :
 	public ModelClass
 {
 public:
+	enum TAG {TAG_SKYBOX, TAG_PLAYER, TAG_END};
+
+public:
 	GameObject();
 	GameObject(const GameObject&);
 	virtual ~GameObject();
 
 public:
+	const TAG GetTag() { return m_eTag; }
 	const D3DXMATRIX GetWorld() const { return m_matWorld; }
-	void SetWorld(D3DXMATRIX matWorld) { m_matWorld = matWorld; }
 
+	void SetWorld(D3DXMATRIX matWorld) { m_matWorld = matWorld; }
 	void SetRight(D3DXVECTOR3 vRight);
 	void SetUp(D3DXVECTOR3 vUp);
 	void SetLook(D3DXVECTOR3 vLook);
@@ -30,5 +34,6 @@ public:
 
 protected:
 	D3DXMATRIX m_matWorld;
+	TAG m_eTag;
 };
 
