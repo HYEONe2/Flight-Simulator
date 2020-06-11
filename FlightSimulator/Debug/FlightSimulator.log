@@ -1,2 +1,5 @@
-﻿  Player.cpp
-  FlightSimulator.vcxproj -> C:\Users\booun\OneDrive\바탕 화면\공부용\2020. 객체지향프로그래밍\Flight-Simulator\Debug\FlightSimulator.exe
+﻿  Asteroid.cpp
+  GraphicsClass.cpp
+  코드를 생성하고 있습니다...
+c:\users\rkek3\documents\github\flight-simulator\flightsimulator\gameobject.h(28): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
+  FlightSimulator.vcxproj -> C:\Users\rkek3\Documents\GitHub\Flight-Simulator\Debug\FlightSimulator.exe

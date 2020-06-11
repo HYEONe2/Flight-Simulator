@@ -97,6 +97,9 @@
     <Filter Include="WinMain\ClientClass\Skybox">
       <UniqueIdentifier>{ae458656-a6de-4a2a-bd6e-1f3113bea122}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WinMain\ClientClass\Asteroid">
+      <UniqueIdentifier>{1402bfa1-a9a3-458b-9d67-d0bac2f45a0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputClass.cpp">
@@ -171,6 +174,9 @@
     <ClCompile Include="Skybox.cpp">
       <Filter>WinMain\ClientClass\Skybox</Filter>
     </ClCompile>
+    <ClCompile Include="Asteroid.cpp">
+      <Filter>WinMain\ClientClass\Asteroid</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InputClass.h">
@@ -241,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="Skybox.h">
       <Filter>WinMain\ClientClass\Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="Asteroid.h">
+      <Filter>WinMain\ClientClass\Asteroid</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
