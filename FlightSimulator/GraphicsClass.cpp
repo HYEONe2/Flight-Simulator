@@ -4,6 +4,10 @@
 #include "GameObject.h"
 #include "Player.h"
 #include "Planet.h"
+#include "Asteroid.h"
+
+#include<cstdlib>
+#include<ctime>
 
 
 GraphicsClass::GraphicsClass()
@@ -32,6 +36,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 {
 	bool result;    
 	int iPolyCnt = 0;
+	srand(unsigned int(time(NULL)));
 
 	// Create the Direct3D object.  
 	m_pD3D = new D3DClass;  
@@ -105,10 +110,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 	
-	// Set the Vertex .
-	result = m_pText->SetSentence(iPolyCnt, m_pD3D->GetDeviceContext());
-	if (!result)
-		return false;
+
 
 	// Create the light shader object.
 	m_pLightShader = new LightShaderClass;
@@ -146,6 +148,21 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	iPolyCnt += (pPlayer->GetVertexCount() / 3);
 
 	m_pGameObjectMgr->PushGameObject(pPlayer);
+
+	
+
+	GameObject* pAs[5]; 
+	for (int i = 0; i < 5;i++) 
+	{
+		int x_RanNum = rand() % 700;
+		int y_RanNum = rand() % 700;
+
+		pAs[i] = new Asteroid;
+		dynamic_cast<Asteroid*>(pAs[i])->Init(pPlayer, { 1.f*x_RanNum,0.f,1.f*y_RanNum });
+		pAs[i]->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Asteroid/10464_Asteroid_v1_Iterations-2.obj", L"../Engine/data/Asteroid/10464_Asteroid_v1_diffuse.jpg");
+		iPolyCnt += (pAs[i]->GetVertexCount() / 3);
+		m_pGameObjectMgr->PushGameObject(pAs[i]);
+	}
 
 
 	GameObject* pMoon = new Planet;
@@ -187,6 +204,12 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 	m_pGameObjectMgr->PushGameObject(m_pPlane);
 	m_pGameObjectMgr->PushGameObject(m_pMonokumaModel);
+
+	// Set the Vertex .
+	result = m_pText->SetSentence(iPolyCnt, m_pD3D->GetDeviceContext());
+	if (!result)
+		return false;
+
 	m_Bitmap = new BitmapClass;
 	if (!m_Bitmap)
 	{

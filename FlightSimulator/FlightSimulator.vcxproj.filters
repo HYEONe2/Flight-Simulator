@@ -94,6 +94,9 @@
     <Filter Include="WinMain\ClientClass\Planet">
       <UniqueIdentifier>{23b9c902-a94d-4a18-9cb7-37c252cf9a31}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WinMain\ClientClass\Asteroid">
+      <UniqueIdentifier>{32acdfef-291b-483e-a051-afc0f0757ba2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputClass.cpp">
@@ -165,6 +168,9 @@
     <ClCompile Include="Planet.cpp">
       <Filter>WinMain\ClientClass\Planet</Filter>
     </ClCompile>
+    <ClCompile Include="Asteroid.cpp">
+      <Filter>WinMain\ClientClass\Asteroid</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InputClass.h">
@@ -232,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="Planet.h">
       <Filter>WinMain\ClientClass\Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="Asteroid.h">
+      <Filter>WinMain\ClientClass\Asteroid</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
