@@ -11,9 +11,10 @@ public:
 
 public:
 	void Init();
-	void Init(GameObject*, D3DXVECTOR3);
+	void Init(D3DXVECTOR3);
 	virtual bool Frame(float);
 	void Shutdown();
+	void Set_Player(GameObject*);
 
 private:
 	void Move(float);

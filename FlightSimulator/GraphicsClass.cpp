@@ -183,25 +183,33 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	pGameObject->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Jupiter/13905_Jupiter_V1_l3.obj", L"../Engine/data/Jupiter/Jupiter_diff.jpg");
 	iPolyCnt += (pGameObject->GetVertexCount() / 3);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
-	
+
+	GameObject* pAs[5];
+	for (int i = 0; i < 5; i++)
+	{
+		int x_RanNum = rand() % 400;
+		int y_RanNum = rand() % 10;
+		int z_RanNum = rand() % 400;
+
+		pAs[i] = new Asteroid;
+		dynamic_cast<Asteroid*>(pAs[i])->Init({ 200.f-(1.f*x_RanNum),5.f - (y_RanNum*1.0f),200.f-(1.f*z_RanNum) });
+		pAs[i]->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Asteroid/10464_Asteroid_v1_Iterations-2.obj", L"../Engine/data/Asteroid/10464_Asteroid_v1_diffuse.jpg");
+		iPolyCnt += (pAs[i]->GetVertexCount() / 3);
+		m_pGameObjectMgr->PushGameObject(pAs[i]);
+	}	
+
 	pGameObject = new Player;
 	dynamic_cast<Player*>(pGameObject)->Init(m_pCamera, m_pInputClass);
 	dynamic_cast<Player*>(pGameObject)->InitCockPit(m_pD3D->GetDevice(), L"../Engine/data/Player/Player.png");
 	iPolyCnt += (pGameObject->GetVertexCount() / 3);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
 
-	GameObject* pAs[5];
 	for (int i = 0; i < 5; i++)
 	{
-		int x_RanNum = rand() % 70;
-		int y_RanNum = rand() % 70;
-
-		pAs[i] = new Asteroid;
-		dynamic_cast<Asteroid*>(pAs[i])->Init(pGameObject, { 1.f*x_RanNum,0.f,1.f*y_RanNum });
-		pAs[i]->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Asteroid/10464_Asteroid_v1_Iterations-2.obj", L"../Engine/data/Asteroid/10464_Asteroid_v1_diffuse.jpg");
-		iPolyCnt += (pAs[i]->GetVertexCount() / 3);
-		m_pGameObjectMgr->PushGameObject(pAs[i]);
+		dynamic_cast<Asteroid*>(pAs[i])->Set_Player(pGameObject);
 	}
+
+
 
 	//m_pGameObjectMgr->PushGameObject(m_pPlane);
 	//m_pGameObjectMgr->PushGameObject(m_pMonokumaModel);

@@ -24,13 +24,8 @@ void Asteroid::Init()
 {
 }
 
-void Asteroid::Init(GameObject* _pPlayer, D3DXVECTOR3 _vPos)
+void Asteroid::Init(D3DXVECTOR3 _vPos)
 {
-	if (_pPlayer)
-		m_pPlayer = _pPlayer;
-	else
-		return;
-
 	m_vPos = _vPos;
 	cout << m_vPos.x<<","<<m_vPos.y << endl;
 }
@@ -45,12 +40,20 @@ void Asteroid::Shutdown()
 {
 }
 
+void Asteroid::Set_Player(GameObject* _pPlayer)
+{
+	if (_pPlayer)
+		m_pPlayer = _pPlayer;
+	else
+		return;
+}
+
 void Asteroid::Move(float fFrameTime)
 {
 	D3DXVECTOR3 vPlayerPos = m_pPlayer->GetPos();
 	float fDist = D3DXVec3Length(&(vPlayerPos - m_vPos));
 	cout<<fDist<<endl;
-	float fSpeed = 0.05f;
+	float fSpeed = 0.07f;
 	if (fDist < 150.f) {
 		if (!m_bIsCloser)
 		{
