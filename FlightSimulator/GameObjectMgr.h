@@ -9,7 +9,6 @@ class GameObject;
 class CameraClass;
 class LightClass;
 class LightShaderClass;
-class TextureShaderClass;
 
 class GameObjectMgr
 {
@@ -22,7 +21,7 @@ public:
 	bool PushGameObject(GameObject* pGameObject);
 	
 	bool Frame(float);
-	void Render(D3DClass*, LightShaderClass*, TextureShaderClass*, CameraClass*, LightClass*);
+	void Render(D3DClass*, LightShaderClass*, LightClass*, CameraClass*);
 	
 	void EraseGameObject(GameObject* pGameObject);
 	void Shutdown();

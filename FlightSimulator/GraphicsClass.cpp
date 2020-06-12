@@ -328,7 +328,7 @@ bool GraphicsClass::Render()
 	m_pD3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
 	// Generate the view matrix based on the camera's position.
-	m_pGameObjectMgr->Render(m_pD3D, m_pLightShader, m_pTextureShader, m_pCamera, m_pLight);
+	m_pGameObjectMgr->Render(m_pD3D, m_pLightShader, m_pLight, m_pCamera);
 	
 	RenderText();
 

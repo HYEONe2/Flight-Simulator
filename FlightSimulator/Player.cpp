@@ -1,7 +1,6 @@
 #include "Player.h"
 
 #include "D3DClass.h"
-#include "BitmapClass.h"
 #include "InputClass.h"
 #include "LightShaderClass.h"
 #include "LightClass.h"
@@ -22,38 +21,80 @@ Player::~Player()
 
 void Player::Init()
 {
-	m_iScreenWidth = 0;
-	m_iScreenHeight = 0;
+	m_pCockpit = 0;
+	m_pEffect = 0;
+	m_pCamera = 0;
+	m_pInput = 0;
 }
 
 void Player::Init(CameraClass *pCamera, InputClass *pInput)
 {
 	m_pInput = pInput;
 	m_pCamera = pCamera;
-	m_pCamera->SetPos( 650.f, 0.f, -600.f );
-	
+	m_pCamera->SetPos(650.f, 0.f, -600.f);
+
 	m_eTag = TAG_PLAYER;
 }
 
 void Player::InitCockPit(ID3D11Device *device, WCHAR * wstrFileName)
 {
 	m_pCockpit = new ModelClass;
-	m_pCockpit->Initialize(device, wstrFileName);
+	m_pCockpit->Initialize(device, L"../Engine/data/Player/Player.png");
+
+	m_pEffect = new ModelClass;
+	m_pEffect->Initialize(device, L"../Engine/data/Player/Damage.png");
 }
 
 bool Player::Frame(float fFrameTime)
 {
 	Move(fFrameTime);
 
+	if (m_bRenderEffect)
+	{
+		if (m_fAlpha < 0.f)
+		{
+			m_fAlpha = 0.f;
+			m_fStayTime = 0.f;
+			m_bReverse = false;
+			m_bRenderEffect = false;
+
+			return true;
+		}
+
+		if (m_fAlpha >= 1.f)
+			m_bReverse = true;
+
+		if (m_bReverse)
+		{
+			m_fStayTime += fFrameTime * 0.001f;
+
+			if(m_fStayTime > 3.f)
+				m_fAlpha -= fFrameTime * 0.005f;
+		}
+		else
+			m_fAlpha += fFrameTime * 0.005f;
+	}
+
+	if (m_pInput->KeyDown(DIK_1))
+		m_bRenderEffect = !m_bRenderEffect;
+
 	return true;
+}
+
+void Player::Render(D3DClass * pD3D, LightShaderClass * pLightShader, LightClass * pLight)
+{
+	m_pCamera->Render();
+
+	if(m_bRenderEffect)
+		RenderEffect(pD3D, pLightShader, pLight);
+
+	RenderCockpit(pD3D, pLightShader, pLight);
 }
 
 void Player::RenderCockpit(D3DClass* pD3D, LightShaderClass* pLightShader, LightClass* pLight)
 {
-	m_pCamera->Render();
-
 	D3DXMATRIX matScale;
-	D3DXMatrixScaling(&matScale, 0.7f, 0.45f, 0.7f);
+	D3DXMatrixScaling(&matScale, 0.7f, 0.5f, 0.7f);
 	D3DXVECTOR3 vDir = { m_pCamera->GetLook().x, m_pCamera->GetLook().y, m_pCamera->GetLook().z };
 	D3DXVec3Normalize(&vDir, &vDir);
 
@@ -70,8 +111,36 @@ void Player::RenderCockpit(D3DClass* pD3D, LightShaderClass* pLightShader, Light
 	pLightShader->Render(pD3D->GetDeviceContext(), m_pCockpit->GetIndexCount(), matBill, m_pCamera->GetView(),
 		pD3D->GetProj(), m_pCockpit->GetTexture(), pLight->GetDirection(), pLight->GetAmbientColor(),
 		pLight->GetDiffuseColor(), m_pCamera->GetPos(), pLight->GetSpecularColor(), pLight->GetSpecularPower());
-	
+
 	pD3D->TurnOffAlphaBlending();
+}
+
+void Player::RenderEffect(D3DClass* pD3D, LightShaderClass* pLightShader, LightClass* pLight)
+{
+	D3DXMATRIX matScale;
+	D3DXMatrixScaling(&matScale, 0.6f, 0.5f, 0.6f);
+	D3DXVECTOR3 vDir = { m_pCamera->GetLook().x, m_pCamera->GetLook().y, m_pCamera->GetLook().z };
+	D3DXVec3Normalize(&vDir, &vDir);
+
+	D3DXMATRIX matBill = m_pCamera->GetView();
+	D3DXMatrixInverse(&matBill, NULL, &matBill);
+	matBill = matScale * matBill;
+	matBill._41 = m_matWorld._41 + vDir.x*1.2f;
+	matBill._42 = m_matWorld._42 + vDir.y*1.2f;
+	matBill._43 = m_matWorld._43 + vDir.z*1.2f;
+
+	pLight->SetAmbientColor(0.3f*m_fAlpha, 0.3f*m_fAlpha, 0.3f*m_fAlpha, m_fAlpha);
+
+	pD3D->TurnOnAlphaBlending();
+	
+	m_pEffect->Render(pD3D->GetDeviceContext());
+	pLightShader->Render(pD3D->GetDeviceContext(), m_pEffect->GetIndexCount(), matBill, m_pCamera->GetView(),
+		pD3D->GetProj(), m_pEffect->GetTexture(), pLight->GetDirection(), pLight->GetAmbientColor(),
+		pLight->GetDiffuseColor(), m_pCamera->GetPos(), pLight->GetSpecularColor(), pLight->GetSpecularPower());
+
+	pD3D->TurnOffAlphaBlending();
+
+	pLight->SetAmbientColor(0.3f, 0.3f, 0.3f, 1.f);
 }
 
 void Player::Shutdown()
@@ -80,6 +149,12 @@ void Player::Shutdown()
 	{
 		delete m_pCockpit;
 		m_pCockpit = 0;
+	}
+
+	if (m_pEffect)
+	{
+		delete m_pEffect;
+		m_pEffect = 0;
 	}
 }
 
@@ -102,7 +177,7 @@ void Player::Move(float fFrameTime)
 	if (m_pInput->KeyPressing(DIK_A))
 	{
 		CheckSpeed(CameraClass::MOVE_LEFT, fFrameTime);
-		m_pCamera->MoveCamera(CameraClass::MOVE_LEFT, fFrameTime*0.5f);
+		m_pCamera->MoveCamera(CameraClass::MOVE_LEFT, fFrameTime* m_fRotSpeed[0] * 100000.f);
 	}
 	else
 		CheckSpeed(CameraClass::MOVE_LEFT, fFrameTime, true);
@@ -111,7 +186,7 @@ void Player::Move(float fFrameTime)
 	if (m_pInput->KeyPressing(DIK_D))
 	{
 		CheckSpeed(CameraClass::MOVE_RIGHT, fFrameTime);
-		m_pCamera->MoveCamera(CameraClass::MOVE_RIGHT, fFrameTime*0.5f);
+		m_pCamera->MoveCamera(CameraClass::MOVE_RIGHT, fFrameTime* m_fRotSpeed[1] * -100000.f);
 	}
 	else
 		CheckSpeed(CameraClass::MOVE_RIGHT, fFrameTime, true);
@@ -144,7 +219,7 @@ void Player::CheckSpeed(CameraClass::MOVE eMove, float fFrameTime, bool bCheck)
 			if (m_fSpeed <= 0)
 				m_fSpeed = 0;
 
-			m_fSpeed -= fFrameTime * 0.001f;
+			m_fSpeed -= fFrameTime * 0.002f;
 		}
 		else
 		{
@@ -160,50 +235,50 @@ void Player::CheckSpeed(CameraClass::MOVE eMove, float fFrameTime, bool bCheck)
 	{
 		if (bCheck)
 		{
-			if (m_fRotSpeedL <= 0)
+			if (m_fRotSpeed[0] <= 0)
 			{
-				m_fRotSpeedL = 0;
-				return;
-			}
-			
-			m_fRotSpeedL -= fFrameTime * 0.0000001f;
-			m_pCamera->RotateCamera(CameraClass::MOVE_RIGHT, -m_fRotSpeedL);
-		}
-		else
-		{
-			if (m_fRotMaxSpeed <= m_fRotSpeedL)
-			{
-				m_fRotSpeedL = m_fRotMaxSpeed;
+				m_fRotSpeed[0] = 0;
 				return;
 			}
 
-			m_fRotSpeedL += fFrameTime * 0.0000001f;
-			m_pCamera->RotateCamera(CameraClass::MOVE_RIGHT, m_fRotSpeedL);
+			m_fRotSpeed[0] -= fFrameTime * 0.0000001f;
+			m_pCamera->RotateCamera(CameraClass::MOVE_RIGHT, -m_fRotSpeed[0]);
+		}
+		else
+		{
+			if (m_fRotSpeedLimit[1] <= m_fRotSpeed[0])
+			{
+				m_fRotSpeed[0] = m_fRotSpeedLimit[1];
+				return;
+			}
+
+			m_fRotSpeed[0] += fFrameTime * 0.0000001f;
+			m_pCamera->RotateCamera(CameraClass::MOVE_RIGHT, m_fRotSpeed[0]);
 		}
 	}
 	else if (eMove == CameraClass::MOVE_RIGHT)
 	{
 		if (bCheck)
 		{
-			if (m_fRotSpeed >= 0)
+			if (m_fRotSpeed[1] >= 0)
 			{
-				m_fRotSpeed = 0;
+				m_fRotSpeed[1] = 0;
 				return;
 			}
 
-			m_fRotSpeed += fFrameTime * 0.0000001f;
-			m_pCamera->RotateCamera(CameraClass::MOVE_RIGHT, -m_fRotSpeed);
+			m_fRotSpeed[1] += fFrameTime * 0.0000001f;
+			m_pCamera->RotateCamera(CameraClass::MOVE_RIGHT, -m_fRotSpeed[1]);
 		}
 		else
 		{
-			if (m_fRotMinSpeed >= m_fRotSpeed)
+			if (m_fRotSpeedLimit[0] >= m_fRotSpeed[1])
 			{
-				m_fRotSpeed = m_fRotMinSpeed;
+				m_fRotSpeed[1] = m_fRotSpeedLimit[0];
 				return;
 			}
 
-			m_fRotSpeed -= fFrameTime * 0.0000001f;
-			m_pCamera->RotateCamera(CameraClass::MOVE_RIGHT, m_fRotSpeed);
+			m_fRotSpeed[1] -= fFrameTime * 0.0000001f;
+			m_pCamera->RotateCamera(CameraClass::MOVE_RIGHT, m_fRotSpeed[1]);
 		}
 	}
 }

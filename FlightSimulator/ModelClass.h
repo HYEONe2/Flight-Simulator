@@ -47,6 +47,9 @@ public:
 	int GetIndexCount();
 
 public:
+	bool SetTexture(ID3D11Device*, WCHAR*);
+
+public:
 	ModelClass();
 	ModelClass(const ModelClass&);
 	virtual ~ModelClass();

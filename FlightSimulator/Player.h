@@ -4,7 +4,6 @@
 #include "CameraClass.h"
 
 class D3DClass;
-class BitmapClass;
 class InputClass;
 class LightShaderClass;
 class LightClass;
@@ -27,7 +26,9 @@ public:
 	void InitCockPit(ID3D11Device*, WCHAR*);
 
 	virtual bool Frame(float);
+	void Render(D3DClass* pD3D, LightShaderClass* pLightShader, LightClass* pLight);
 	void RenderCockpit(D3DClass*, LightShaderClass*, LightClass*);
+	void RenderEffect(D3DClass*, LightShaderClass*, LightClass*);
 	void Shutdown();
 
 private:
@@ -35,19 +36,20 @@ private:
 	void CheckSpeed(CameraClass::MOVE, float, bool = false);
 
 private:
-	ModelClass* m_pCockpit;
-	CameraClass* m_pCamera;
 	InputClass* m_pInput;
-
-	int m_iScreenWidth;
-	int m_iScreenHeight;
+	CameraClass* m_pCamera;
+	ModelClass* m_pCockpit;
+	ModelClass* m_pEffect;
 
 	float m_fSpeed = 0.f;
-	float m_fMaxSpeed = 5.f;
+	float m_fMaxSpeed = 10.f;
 
-	float m_fRotSpeed = 0.f;
-	float m_fRotSpeedL = 0.f;
-	float m_fRotMinSpeed = -0.0002f;
-	float m_fRotMaxSpeed = 0.0002f;
+	float m_fRotSpeed[2] { 0.f,0.f };
+	float m_fRotSpeedLimit[2]{ -0.0001f , 0.0001f};
+
+	bool m_bRenderEffect = false;
+	bool m_bReverse = false;
+	float m_fAlpha = 0.f;
+	float m_fStayTime = 0.f;
 };
 

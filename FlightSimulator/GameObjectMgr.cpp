@@ -5,7 +5,6 @@
 #include "CameraClass.h"
 #include "LightClass.h"
 #include "LightShaderClass.h"
-#include "TextureShaderClass.h"
 
 #include "Player.h"
 #include "Skybox.h"
@@ -48,7 +47,7 @@ bool GameObjectMgr::Frame(float fFrameTime)
 	return true;
 }
 
-void GameObjectMgr::Render(D3DClass * pD3D, LightShaderClass* pLightShader, TextureShaderClass* pTextureShader, CameraClass * pCamera, LightClass * pLight)
+void GameObjectMgr::Render(D3DClass * pD3D, LightShaderClass* pLightShader, LightClass * pLight, CameraClass * pCamera)
 {
 	if (m_GameObjectLst.size() == 0)
 		return;
@@ -82,7 +81,7 @@ void GameObjectMgr::Render(D3DClass * pD3D, LightShaderClass* pLightShader, Text
 
 		if (iter->GetTag() == GameObject::TAG_PLAYER)
 		{
-			dynamic_cast<Player*>(iter)->RenderCockpit(pD3D, pLightShader, pLight);
+			dynamic_cast<Player*>(iter)->Render(pD3D, pLightShader, pLight);
 			continue;
 		}
 

@@ -200,6 +200,19 @@ int ModelClass::GetIndexCount()
 	return m_iIndexCount;
 }
 
+bool ModelClass::SetTexture(ID3D11Device* device, WCHAR * wstrFileName)
+{
+	bool result;
+	
+	// Initialize the texture object.
+	result = m_pTexture->Initialize(device, wstrFileName);
+	if (!result)
+	{
+		return false;
+	}
+	return true;
+}
+
 bool ModelClass::InitializeBuffers(ID3D11Device *device)
 {
 	VertexType* vertices;
