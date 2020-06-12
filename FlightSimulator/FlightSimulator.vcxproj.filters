@@ -183,6 +183,12 @@
     <ClCompile Include="DistanceUI.cpp">
       <Filter>WinMain\ClientClass\DistanceUI</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionMgr.cpp">
+      <Filter>WinMain\ManagerClass\CollisionMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>WinMain\ManagerClass\CollisionMgr\Collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InputClass.h">
@@ -259,6 +265,12 @@
     </ClInclude>
     <ClInclude Include="DistanceUI.h">
       <Filter>WinMain\ClientClass\DistanceUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionMgr.h">
+      <Filter>WinMain\ManagerClass\CollisionMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>WinMain\ManagerClass\CollisionMgr\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

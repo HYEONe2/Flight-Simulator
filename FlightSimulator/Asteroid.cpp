@@ -1,5 +1,6 @@
 #include "Asteroid.h"
 #include "Player.h"
+#include "Collision.h"
 
 #include <iostream>
 using namespace std;
@@ -18,6 +19,7 @@ Asteroid::Asteroid(Asteroid &)
 
 Asteroid::~Asteroid()
 {
+	Shutdown();
 }
 
 void Asteroid::Init()
@@ -27,17 +29,24 @@ void Asteroid::Init()
 void Asteroid::Init(D3DXVECTOR3 _vPos)
 {
 	m_vPos = _vPos;
-	//cout << m_vPos.x<<","<<m_vPos.y << endl;
+	m_pCollision = new Collision;
+	m_pCollision->Init(Collision::COL_ASEROID, _vPos, 10.0f);
+	cout << m_vPos.x << "," << m_vPos.y << endl;
+	m_eTag = TAG_ASTEROID;
 }
 
 bool Asteroid::Frame(float fFrameTime)
 {
 	Move(fFrameTime);
+	if (m_pCollision)
+		m_pCollision->UpdatePos(m_vPos);
+	
 	return true;
 }
 
 void Asteroid::Shutdown()
 {
+
 }
 
 void Asteroid::Set_Player(GameObject* _pPlayer)
@@ -46,6 +55,11 @@ void Asteroid::Set_Player(GameObject* _pPlayer)
 		m_pPlayer = _pPlayer;
 	else
 		return;
+}
+
+Collision* Asteroid::Get_Collision()
+{
+	return m_pCollision;
 }
 
 void Asteroid::Move(float fFrameTime)
@@ -78,8 +92,8 @@ void Asteroid::Move(float fFrameTime)
 	D3DXMATRIX  matTans, matRot, matScale;
 
 	D3DXMatrixScaling(&matScale, 0.01f, 0.01f, 0.01f);
-	D3DXMatrixRotationY(&matRot, rotation*30.f);
-	D3DXMatrixTranslation(&matTans, m_vPos.x, m_vPos.y, m_vPos.z);
+	//D3DXMatrixRotationY(&matRot, rotation*30.f);
+	D3DXMatrixTranslation(&matTans, m_vPos.x - 7.5f, m_vPos.y, m_vPos.z);
 
-	m_matWorld = matScale * matRot * matTans;
+	m_matWorld = matScale  * matTans;
 }

@@ -3,11 +3,16 @@
 #include <windows.h>
 #include "D3DClass.h"
 
+#include <list>
+using namespace std;
+
 #include "TextClass.h"
 #include "CameraClass.h"
 #include "LightShaderClass.h"
 #include "InputClass.h"
-#include "LightClass.h"
+#include "LightClass.h"
+
+class CollisionMgr;
 class GameObjectMgr;
 class GameObject;
 
@@ -34,7 +39,8 @@ public:
 
 private:
 	bool Render();
-	bool RenderText();
+	bool RenderText();
+
 private:
 	D3DClass* m_pD3D;
 	CameraClass* m_pCamera;
@@ -43,7 +49,10 @@ private:
 	TextClass* m_pText;
 	InputClass* m_pInputClass;
 
-	GameObject* m_pMonokumaModel;
 	GameObjectMgr* m_pGameObjectMgr;
+	CollisionMgr* m_pCollisionMgr;
+
+	GameObject* m_pPlayer;
+	list<GameObject*> m_plistAs;
 };
 

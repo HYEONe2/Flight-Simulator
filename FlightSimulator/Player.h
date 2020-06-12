@@ -7,6 +7,7 @@ class D3DClass;
 class InputClass;
 class LightShaderClass;
 class LightClass;
+class Collision;
 
 class Player :
 	public GameObject
@@ -19,6 +20,9 @@ public:
 public:
 	void SetCamera(CameraClass* pCamera) { m_pCamera = pCamera; }
 	void SetInput(InputClass* pInput) { m_pInput = pInput; }
+	void SetEffectOn() { m_bRenderEffect = true; m_fStayTime = 0; }
+	Collision* Get_Collision() { return m_pCollision; }
+
 
 public:
 	void Init();
@@ -40,6 +44,7 @@ private:
 	CameraClass* m_pCamera;
 	ModelClass* m_pCockpit;
 	ModelClass* m_pEffect;
+	Collision* m_pCollision;
 
 	float m_fSpeed = 0.f;
 	float m_fMaxSpeed = 10.f;

@@ -22,6 +22,8 @@
     <ClCompile Include="Asteroid.cpp" />
     <ClCompile Include="BitmapClass.cpp" />
     <ClCompile Include="CameraClass.cpp" />
+    <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="CollisionMgr.cpp" />
     <ClCompile Include="ColorShaderClass.cpp" />
     <ClCompile Include="CpuClass.cpp" />
     <ClCompile Include="D3DClass.cpp" />
@@ -50,6 +52,8 @@
     <ClInclude Include="Asteroid.h" />
     <ClInclude Include="BitmapClass.h" />
     <ClInclude Include="CameraClass.h" />
+    <ClInclude Include="Collision.h" />
+    <ClInclude Include="CollisionMgr.h" />
     <ClInclude Include="ColorShaderClass.h" />
     <ClInclude Include="CpuClass.h" />
     <ClInclude Include="D3DClass.h" />

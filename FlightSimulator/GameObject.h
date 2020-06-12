@@ -5,7 +5,7 @@ class GameObject :
 	public ModelClass
 {
 public:
-	enum TAG {TAG_SKYBOX, TAG_PLAYER, TAG_UI, TAG_END};
+	enum TAG {TAG_SKYBOX, TAG_PLAYER, TAG_ASTEROID, TAG_UI, TAG_END};
 
 public:
 	GameObject();

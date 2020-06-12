@@ -67,4 +67,9 @@ void DistanceUI::Render(D3DClass * pD3D, LightShaderClass * pLightShader, LightC
 
 void DistanceUI::Shutdown()
 {
+	if (m_pDistance)
+	{
+		delete m_pDistance;
+		m_pDistance = 0;
+	}
 }

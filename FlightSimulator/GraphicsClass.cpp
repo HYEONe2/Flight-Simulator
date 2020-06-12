@@ -2,6 +2,8 @@
 
 #include "GameObjectMgr.h"
 #include "GameObject.h"
+#include "CollisionMgr.h"
+#include "Collision.h"
 #include "Player.h"
 #include "Planet.h"
 #include "Skybox.h"
@@ -10,6 +12,7 @@
 
 #include<cstdlib>
 #include<ctime>
+#include <iostream>
 
 GraphicsClass::GraphicsClass()
 {
@@ -19,9 +22,8 @@ GraphicsClass::GraphicsClass()
 	m_pLight = 0;
 	m_pText = 0;
 
-	m_pMonokumaModel = 0;
-
 	m_pGameObjectMgr = 0;
+	m_pCollisionMgr = 0;
 }
 
 GraphicsClass::GraphicsClass(const GraphicsClass& other)
@@ -63,20 +65,6 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_pCamera->Render();
 	m_pCamera->GetViewMatrix(baseViewMatrix);
 
-	// Create the model object.
-	m_pMonokumaModel = new GameObject;
-	if (!m_pMonokumaModel)
-		return false;
-	//result = m_pMonokumaModel->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Moon/Moon 2K.obj", L"../Engine/data/Moon/Diffuse_2K.png");
-	result = m_pMonokumaModel->Initialize(m_pD3D->GetDevice(), L"../Engine/data/Monokuma/Monokuma.obj", L"../Engine/data/Monokuma/kuma00_p4.dds");
-	if (!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
-		return false;
-	}
-
-	iPolyCnt += (m_pMonokumaModel->GetVertexCount() / 3);
-
 	// Create the text object.
 	m_pText = new TextClass;
 	if (!m_pText)
@@ -116,6 +104,10 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 	m_pGameObjectMgr = new GameObjectMgr;
 	if (!m_pGameObjectMgr)
+		return false;
+
+	m_pCollisionMgr = new CollisionMgr;
+	if (!m_pCollisionMgr)
 		return false;
 
 	GameObject* pGameObject = nullptr;
@@ -163,42 +155,46 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	iPolyCnt += (pGameObject->GetVertexCount() / 3);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
 
-	GameObject* pAs[5];
-	for (int i = 0; i < 5; i++)
+	Collision* pCollision;
+	for (int i = 0; i < 20; i++)
 	{
-		int x_RanNum = rand() % 400;
-		int y_RanNum = rand() % 10;
-		int z_RanNum = rand() % 400;
+		int x_RanNum = rand() % 700;
+		int y_RanNum = rand() % 100;
+		int z_RanNum = rand() % 700;
 
-		pAs[i] = new Asteroid;
-		dynamic_cast<Asteroid*>(pAs[i])->Init({ 200.f-(1.f*x_RanNum),5.f - (y_RanNum*1.0f),200.f-(1.f*z_RanNum) });
-		pAs[i]->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Asteroid/10464_Asteroid_v1_Iterations-2.obj", L"../Engine/data/Asteroid/10464_Asteroid_v1_diffuse.jpg");
-		iPolyCnt += (pAs[i]->GetVertexCount() / 3);
-		m_pGameObjectMgr->PushGameObject(pAs[i]);
-	}	
+		pGameObject = new Asteroid;
+		dynamic_cast<Asteroid*>(pGameObject)->Init({ 350.f - (1.f*x_RanNum),50.f - (y_RanNum*1.0f),350.f - (1.f*z_RanNum) });
+		pGameObject->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Asteroid/10464_Asteroid_v1_Iterations-2.obj", L"../Engine/data/Asteroid/10464_Asteroid_v1_diffuse.jpg");
+		iPolyCnt += (pGameObject->GetVertexCount() / 3);
+		m_pGameObjectMgr->PushGameObject(pGameObject);
 
-	GameObject* pPlayer = new Player;
-	dynamic_cast<Player*>(pPlayer)->Init(m_pCamera, m_pInputClass);
-	dynamic_cast<Player*>(pPlayer)->Init(m_pD3D->GetDevice());
-	iPolyCnt += (pPlayer->GetVertexCount() / 3);
-	m_pGameObjectMgr->PushGameObject(pPlayer);
+		pCollision = dynamic_cast<Asteroid*>(pGameObject)->Get_Collision();
+		m_pCollisionMgr->PushCollObject(Collision::COL_ASEROID, pCollision);
+		m_plistAs.push_back(pGameObject);
+	}
 
-	for (int i = 0; i < 5; i++)
+	m_pPlayer = new Player;
+	dynamic_cast<Player*>(m_pPlayer)->Init(m_pCamera, m_pInputClass);
+	dynamic_cast<Player*>(m_pPlayer)->Init(m_pD3D->GetDevice());
+	iPolyCnt += (m_pPlayer->GetVertexCount() / 3);
+	m_pGameObjectMgr->PushGameObject(m_pPlayer);
+	pCollision = dynamic_cast<Player*>(m_pPlayer)->Get_Collision();
+	m_pCollisionMgr->PushCollObject(Collision::COL_PLAYER, pCollision);
+
+	for (auto iter : m_plistAs)
 	{
-		dynamic_cast<Asteroid*>(pAs[i])->Set_Player(pPlayer);
+		dynamic_cast<Asteroid*>(iter)->Set_Player(m_pPlayer);
 	}
 
 	pGameObject = new DistanceUI;
 	pGameObject->Initialize(m_pD3D->GetDevice(), L"../Engine/data/UI/DistanceBack.png");
 	dynamic_cast<DistanceUI*>(pGameObject)->Init(m_pD3D);
 	dynamic_cast<DistanceUI*>(pGameObject)->SetCamera(m_pCamera);
-	dynamic_cast<DistanceUI*>(pGameObject)->SetPlayer(pPlayer);
+	dynamic_cast<DistanceUI*>(pGameObject)->SetPlayer(m_pPlayer);
 	iPolyCnt += (pGameObject->GetVertexCount() / 3);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
 
-	//m_pGameObjectMgr->PushGameObject(m_pPlane);
-	//m_pGameObjectMgr->PushGameObject(m_pMonokumaModel);
-		// Set the Vertex .
+	// Set the Vertex .
 	result = m_pText->SetSentence(iPolyCnt, m_pD3D->GetDeviceContext());
 	if (!result)
 		return false;
@@ -244,6 +240,12 @@ void GraphicsClass::Shutdown()
 		m_pD3D = 0;
 	}
 
+	if (m_pCollisionMgr)
+	{
+		delete m_pCollisionMgr;
+		m_pCollisionMgr = 0;
+	}
+
 	if (m_pGameObjectMgr)
 	{
 		//m_pGameObjectMgr->Shutdown();
@@ -281,6 +283,21 @@ bool GraphicsClass::Frame(int fps, int cpu, float frameTime)
 	
 	// Render the graphics scene. 
 	result = m_pGameObjectMgr->Frame(frameTime);
+
+	if (m_pCollisionMgr->UpdateCollsion(Collision::COL_PLAYER, Collision::COL_ASEROID))
+	{
+		list<GameObject*>::iterator iter;
+		for (iter = m_plistAs.begin(); iter != m_plistAs.end();) {
+			if (10.f > dynamic_cast<Asteroid*>(*iter)->Get_Collision()->Get_Radius())
+			{
+				dynamic_cast<Player*>(m_pPlayer)->SetEffectOn();
+				m_pGameObjectMgr->EraseGameObject(*iter);
+				iter = m_plistAs.erase(iter);
+			}
+			else
+				iter++;
+		}
+	}
 
 	result = Render();
 	if(!result)
