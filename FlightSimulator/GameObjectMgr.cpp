@@ -6,8 +6,9 @@
 #include "LightClass.h"
 #include "LightShaderClass.h"
 
-#include "Player.h"
 #include "Skybox.h"
+#include "Player.h"
+#include "DistanceUI.h"
 
 #include <iostream>
 using namespace std;
@@ -83,6 +84,11 @@ void GameObjectMgr::Render(D3DClass * pD3D, LightShaderClass* pLightShader, Ligh
 		{
 			dynamic_cast<Player*>(iter)->Render(pD3D, pLightShader, pLight);
 			continue;
+		}
+		else if (iter->GetTag() == GameObject::TAG_UI)
+		{
+			dynamic_cast<DistanceUI*>(iter)->Render(pD3D, pLightShader, pLight);
+			//continue;
 		}
 
 		iter->Render(pD3D->GetDeviceContext());

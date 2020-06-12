@@ -14,8 +14,9 @@ public:
 
 public:
 	void Init();
-
 	virtual bool Frame(float);
+
+private:
 	void Shutdown();
 
 public:

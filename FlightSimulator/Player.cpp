@@ -36,7 +36,7 @@ void Player::Init(CameraClass *pCamera, InputClass *pInput)
 	m_eTag = TAG_PLAYER;
 }
 
-void Player::InitCockPit(ID3D11Device *device, WCHAR * wstrFileName)
+void Player::Init(ID3D11Device *device)
 {
 	m_pCockpit = new ModelClass;
 	m_pCockpit->Initialize(device, L"../Engine/data/Player/Player.png");

@@ -100,6 +100,9 @@
     <Filter Include="WinMain\ClientClass\Asteroid">
       <UniqueIdentifier>{1402bfa1-a9a3-458b-9d67-d0bac2f45a0f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WinMain\ClientClass\DistanceUI">
+      <UniqueIdentifier>{ad873e53-bb44-43fd-a705-257d2d654abe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputClass.cpp">
@@ -177,6 +180,9 @@
     <ClCompile Include="Asteroid.cpp">
       <Filter>WinMain\ClientClass\Asteroid</Filter>
     </ClCompile>
+    <ClCompile Include="DistanceUI.cpp">
+      <Filter>WinMain\ClientClass\DistanceUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InputClass.h">
@@ -250,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="Asteroid.h">
       <Filter>WinMain\ClientClass\Asteroid</Filter>
+    </ClInclude>
+    <ClInclude Include="DistanceUI.h">
+      <Filter>WinMain\ClientClass\DistanceUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

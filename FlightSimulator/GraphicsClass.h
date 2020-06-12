@@ -4,10 +4,8 @@
 #include "D3DClass.h"
 
 #include "TextClass.h"
-#include "BitmapClass.h"
 #include "CameraClass.h"
 #include "LightShaderClass.h"
-#include "TextureShaderClass.h"
 #include "InputClass.h"
 #include "LightClass.h"
 class GameObjectMgr;
@@ -42,16 +40,10 @@ private:
 	CameraClass* m_pCamera;
 	LightShaderClass* m_pLightShader;
 	LightClass* m_pLight;
-	TextureShaderClass* m_pTextureShader;
 	TextClass* m_pText;
 	InputClass* m_pInputClass;
 
-	GameObject* m_pPlane;
 	GameObject* m_pMonokumaModel;
-
 	GameObjectMgr* m_pGameObjectMgr;
-
-	BitmapClass* m_Bitmap;
-
 };
 

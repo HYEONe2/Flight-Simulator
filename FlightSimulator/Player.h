@@ -23,17 +23,17 @@ public:
 public:
 	void Init();
 	void Init(CameraClass*, InputClass*);
-	void InitCockPit(ID3D11Device*, WCHAR*);
+	void Init(ID3D11Device*);
 
 	virtual bool Frame(float);
-	void Render(D3DClass* pD3D, LightShaderClass* pLightShader, LightClass* pLight);
+	void Render(D3DClass*, LightShaderClass*, LightClass*);
 	void RenderCockpit(D3DClass*, LightShaderClass*, LightClass*);
 	void RenderEffect(D3DClass*, LightShaderClass*, LightClass*);
-	void Shutdown();
 
 private:
 	void Move(float);
 	void CheckSpeed(CameraClass::MOVE, float, bool = false);
+	void Shutdown();
 
 private:
 	InputClass* m_pInput;

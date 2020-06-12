@@ -6,10 +6,10 @@
 #include "Planet.h"
 #include "Skybox.h"
 #include "Asteroid.h"
+#include "DistanceUI.h"
 
 #include<cstdlib>
 #include<ctime>
-
 
 GraphicsClass::GraphicsClass()
 {
@@ -19,7 +19,6 @@ GraphicsClass::GraphicsClass()
 	m_pLight = 0;
 	m_pText = 0;
 
-	m_pPlane = 0;
 	m_pMonokumaModel = 0;
 
 	m_pGameObjectMgr = 0;
@@ -64,25 +63,6 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_pCamera->Render();
 	m_pCamera->GetViewMatrix(baseViewMatrix);
 
-	m_pTextureShader = new TextureShaderClass;
-	if (!m_pTextureShader)
-		return false;
-	
-	result = m_pTextureShader->Initialize(m_pD3D->GetDevice(), hwnd);
-	if (!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the texture shader object.", L"Error", MB_OK);
-		return false;
-	}
-
-	// Create the plane object.
-	m_pPlane = new GameObject;
-	result = m_pPlane->InitializeForPlane(m_pD3D->GetDevice(), L"../Engine/data/Plane/PlaneTexture.dds");
-	if (!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
-		return false;
-	}
 	// Create the model object.
 	m_pMonokumaModel = new GameObject;
 	if (!m_pMonokumaModel)
@@ -95,7 +75,6 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	iPolyCnt += (m_pPlane->GetVertexCount() / 3);
 	iPolyCnt += (m_pMonokumaModel->GetVertexCount() / 3);
 
 	// Create the text object.
@@ -198,18 +177,24 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		m_pGameObjectMgr->PushGameObject(pAs[i]);
 	}	
 
-	pGameObject = new Player;
-	dynamic_cast<Player*>(pGameObject)->Init(m_pCamera, m_pInputClass);
-	dynamic_cast<Player*>(pGameObject)->InitCockPit(m_pD3D->GetDevice(), L"../Engine/data/Player/Player.png");
-	iPolyCnt += (pGameObject->GetVertexCount() / 3);
-	m_pGameObjectMgr->PushGameObject(pGameObject);
+	GameObject* pPlayer = new Player;
+	dynamic_cast<Player*>(pPlayer)->Init(m_pCamera, m_pInputClass);
+	dynamic_cast<Player*>(pPlayer)->Init(m_pD3D->GetDevice());
+	iPolyCnt += (pPlayer->GetVertexCount() / 3);
+	m_pGameObjectMgr->PushGameObject(pPlayer);
 
 	for (int i = 0; i < 5; i++)
 	{
-		dynamic_cast<Asteroid*>(pAs[i])->Set_Player(pGameObject);
+		dynamic_cast<Asteroid*>(pAs[i])->Set_Player(pPlayer);
 	}
 
-
+	pGameObject = new DistanceUI;
+	pGameObject->Initialize(m_pD3D->GetDevice(), L"../Engine/data/UI/DistanceBack.png");
+	dynamic_cast<DistanceUI*>(pGameObject)->Init(m_pD3D);
+	dynamic_cast<DistanceUI*>(pGameObject)->SetCamera(m_pCamera);
+	dynamic_cast<DistanceUI*>(pGameObject)->SetPlayer(pPlayer);
+	iPolyCnt += (pGameObject->GetVertexCount() / 3);
+	m_pGameObjectMgr->PushGameObject(pGameObject);
 
 	//m_pGameObjectMgr->PushGameObject(m_pPlane);
 	//m_pGameObjectMgr->PushGameObject(m_pMonokumaModel);
@@ -244,12 +229,6 @@ void GraphicsClass::Shutdown()
 		m_pLightShader->Shutdown();
 		delete m_pLightShader;
 		m_pLightShader = 0;
-	}
-	if (m_pTextureShader)
-	{
-		m_pTextureShader->Shutdown();
-		delete m_pTextureShader;
-		m_pTextureShader = 0;
 	}
 	// Release the camera object.
 	if (m_pCamera)
