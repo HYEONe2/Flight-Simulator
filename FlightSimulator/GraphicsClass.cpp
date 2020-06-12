@@ -2,6 +2,8 @@
 
 #include "GameObjectMgr.h"
 #include "GameObject.h"
+#include "CollisionMgr.h"
+#include "Collision.h"
 #include "Player.h"
 #include "Planet.h"
 #include "Skybox.h"
@@ -10,6 +12,7 @@
 #include<cstdlib>
 #include<ctime>
 
+#include <iostream>
 
 GraphicsClass::GraphicsClass()
 {
@@ -23,6 +26,7 @@ GraphicsClass::GraphicsClass()
 	m_pMonokumaModel = 0;
 
 	m_pGameObjectMgr = 0;
+	m_pCollisionMgr = 0;
 }
 
 GraphicsClass::GraphicsClass(const GraphicsClass& other)
@@ -139,6 +143,10 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	if (!m_pGameObjectMgr)
 		return false;
 
+	m_pCollisionMgr = new CollisionMgr;
+	if (!m_pCollisionMgr)
+		return false;
+
 	GameObject* pGameObject = nullptr;
 	
 	pGameObject = new Skybox;
@@ -184,29 +192,38 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	iPolyCnt += (pGameObject->GetVertexCount() / 3);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
 
-	GameObject* pAs[5];
+	Collision* pCollision;
+	GameObject* pAs;
 	for (int i = 0; i < 5; i++)
 	{
 		int x_RanNum = rand() % 400;
 		int y_RanNum = rand() % 10;
 		int z_RanNum = rand() % 400;
 
-		pAs[i] = new Asteroid;
-		dynamic_cast<Asteroid*>(pAs[i])->Init({ 200.f-(1.f*x_RanNum),5.f - (y_RanNum*1.0f),200.f-(1.f*z_RanNum) });
-		pAs[i]->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Asteroid/10464_Asteroid_v1_Iterations-2.obj", L"../Engine/data/Asteroid/10464_Asteroid_v1_diffuse.jpg");
-		iPolyCnt += (pAs[i]->GetVertexCount() / 3);
-		m_pGameObjectMgr->PushGameObject(pAs[i]);
-	}	
+		pAs = new Asteroid;
+		dynamic_cast<Asteroid*>(pAs)->Init({ 200.f-(1.f*x_RanNum),5.f - (y_RanNum*1.0f),200.f-(1.f*z_RanNum) });
+		pAs->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Asteroid/10464_Asteroid_v1_Iterations-2.obj", L"../Engine/data/Asteroid/10464_Asteroid_v1_diffuse.jpg");
+		iPolyCnt += (pAs->GetVertexCount() / 3);
+		m_pGameObjectMgr->PushGameObject(pAs);
 
+		pCollision = dynamic_cast<Asteroid*>(pAs)->Get_Collision();
+		m_pCollisionMgr->PushCollObject(Collision::COL_ASEROID, pCollision);
+		m_plistAs.push_back(pAs);
+	}	
+	
 	pGameObject = new Player;
 	dynamic_cast<Player*>(pGameObject)->Init(m_pCamera, m_pInputClass);
+
 	dynamic_cast<Player*>(pGameObject)->InitCockPit(m_pD3D->GetDevice(), L"../Engine/data/Player/Player.png");
 	iPolyCnt += (pGameObject->GetVertexCount() / 3);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
+	pCollision = dynamic_cast<Player*>(pGameObject)->Get_Collision();
+	m_pCollisionMgr->PushCollObject(Collision::COL_PLAYER, pCollision);
 
-	for (int i = 0; i < 5; i++)
+
+	for (auto iter: m_plistAs)
 	{
-		dynamic_cast<Asteroid*>(pAs[i])->Set_Player(pGameObject);
+		dynamic_cast<Asteroid*>(iter)->Set_Player(pGameObject);
 	}
 
 
@@ -217,6 +234,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	result = m_pText->SetSentence(iPolyCnt, m_pD3D->GetDeviceContext());
 	if (!result)
 		return false;
+
 
 
 	return true;
@@ -272,6 +290,12 @@ void GraphicsClass::Shutdown()
 		m_pGameObjectMgr = 0;
 	}
 
+	if (m_pCollisionMgr)
+	{
+		delete m_pCollisionMgr;
+		m_pCollisionMgr = 0;
+	}
+
 	return;
 }
 
@@ -302,6 +326,21 @@ bool GraphicsClass::Frame(int fps, int cpu, float frameTime)
 	
 	// Render the graphics scene. 
 	result = m_pGameObjectMgr->Frame(frameTime);
+
+	if (m_pCollisionMgr->UpdateCollsion(Collision::COL_PLAYER, Collision::COL_ASEROID))
+	{
+		list<GameObject*>::iterator iter;
+		for (iter = m_plistAs.begin(); iter != m_plistAs.end();) {
+			//std:: cout << dynamic_cast<Asteroid*>(m_pAs[i])->Get_Collision()->Get_Radius() << endl;
+			if (10.f > dynamic_cast<Asteroid*>(*iter)->Get_Collision()->Get_Radius())
+			{
+				m_pGameObjectMgr->EraseGameObject(*iter);
+				iter = m_plistAs.erase(iter);
+			}
+			else
+				iter++;
+		}
+	}
 
 	result = Render();
 	if(!result)

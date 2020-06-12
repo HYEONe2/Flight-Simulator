@@ -8,6 +8,7 @@ class BitmapClass;
 class InputClass;
 class LightShaderClass;
 class LightClass;
+class Collision;
 
 class Player :
 	public GameObject
@@ -20,6 +21,7 @@ public:
 public:
 	void SetCamera(CameraClass* pCamera) { m_pCamera = pCamera; }
 	void SetInput(InputClass* pInput) { m_pInput = pInput; }
+	Collision* Get_Collision() { return m_pCollision; }
 
 public:
 	void Init();
@@ -38,6 +40,7 @@ private:
 	ModelClass* m_pCockpit;
 	CameraClass* m_pCamera;
 	InputClass* m_pInput;
+	Collision* m_pCollision;
 
 	int m_iScreenWidth;
 	int m_iScreenHeight;

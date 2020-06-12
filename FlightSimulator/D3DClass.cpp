@@ -174,7 +174,9 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 	// Discard the back buffer contents after presenting.
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	// Don't set the advanced flags.
-	swapChainDesc.Flags = 0;	// Set the feature level to DirectX 11.
+	swapChainDesc.Flags = 0;
+
+	// Set the feature level to DirectX 11.
 	featureLevel = D3D_FEATURE_LEVEL_11_0;
 
 	// Create the swap chain, Direct3D device, and Direct3D device context.

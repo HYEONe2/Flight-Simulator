@@ -5,6 +5,7 @@
 #include "InputClass.h"
 #include "LightShaderClass.h"
 #include "LightClass.h"
+#include "Collision.h"
 
 Player::Player()
 {
@@ -31,7 +32,8 @@ void Player::Init(CameraClass *pCamera, InputClass *pInput)
 	m_pInput = pInput;
 	m_pCamera = pCamera;
 	m_pCamera->SetPos( 650.f, 0.f, -600.f );
-	
+	m_pCollision = new Collision;
+	m_pCollision->Init(Collision::COL_PLAYER, pCamera->GetPos(), 1.0f);
 	m_eTag = TAG_PLAYER;
 }
 
@@ -44,7 +46,8 @@ void Player::InitCockPit(ID3D11Device *device, WCHAR * wstrFileName)
 bool Player::Frame(float fFrameTime)
 {
 	Move(fFrameTime);
-
+	if(m_pCollision)
+		m_pCollision->UpdatePos(m_pCamera->GetPos());
 	return true;
 }
 

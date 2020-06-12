@@ -1,4 +1,5 @@
 #pragma once
+#define MAX_ASTEROID 5
 
 #include <windows.h>
 #include "D3DClass.h"
@@ -9,9 +10,13 @@
 #include "LightShaderClass.h"
 #include "TextureShaderClass.h"
 #include "InputClass.h"
-#include "LightClass.h"
+#include "LightClass.h"
+#include <list>
+using namespace std;
+
 class GameObjectMgr;
 class GameObject;
+class CollisionMgr;
 
 // Globals
 const bool FULL_SCREEN = false;
@@ -36,7 +41,8 @@ public:
 
 private:
 	bool Render();
-	bool RenderText();
+	bool RenderText();
+
 private:
 	D3DClass* m_pD3D;
 	CameraClass* m_pCamera;
@@ -50,8 +56,11 @@ private:
 	GameObject* m_pMonokumaModel;
 
 	GameObjectMgr* m_pGameObjectMgr;
+	CollisionMgr* m_pCollisionMgr;
 
 	BitmapClass* m_Bitmap;
+
+	list<GameObject*> m_plistAs;
 
 };
 

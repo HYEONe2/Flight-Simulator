@@ -177,6 +177,12 @@
     <ClCompile Include="Asteroid.cpp">
       <Filter>WinMain\ClientClass\Asteroid</Filter>
     </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>WinMain\ManagerClass\CollisionMgr\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionMgr.cpp">
+      <Filter>WinMain\ManagerClass\CollisionMgr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InputClass.h">
@@ -250,6 +256,12 @@
     </ClInclude>
     <ClInclude Include="Asteroid.h">
       <Filter>WinMain\ClientClass\Asteroid</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>WinMain\ManagerClass\CollisionMgr\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionMgr.h">
+      <Filter>WinMain\ManagerClass\CollisionMgr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
