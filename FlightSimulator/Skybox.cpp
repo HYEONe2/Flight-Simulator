@@ -23,7 +23,7 @@ Skybox::~Skybox()
 void Skybox::Init()
 {
 	D3DXMATRIX matScale;
-	D3DXMatrixScaling(&matScale, 800.f, 800.f, 800.f);
+	D3DXMatrixScaling(&matScale, 700.f, 700.f, 700.f);
 	SetWorld(matScale);
 
 	m_eTag = TAG_SKYBOX;

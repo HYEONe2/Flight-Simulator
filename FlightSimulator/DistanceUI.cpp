@@ -71,17 +71,13 @@ void DistanceUI::Render(D3DClass * pD3D, LightShaderClass * pLightShader, LightC
 
 	if (m_fRate < 0.01f)
 		m_fRate = 0.f;
-	if (m_fRate >= 1.f)
+	if (m_fRate > 0.99f)
 		m_fRate = 1.f;
-
-	matWorld = m_matWorld;
-	matWorld._41 = matBill._41 -0.2f;
-	//matWorld._42 = matBill._42 /*-0.1f*/;
-	cout << matWorld._43 << endl;
-	matWorld._43 = matWorld._43 -0.1f;
-	D3DXMatrixTranslation(&matTrans, 1.01f, 0, -0.001f);
+	
+	D3DXMatrixTranslation(&matTrans, 1.f, 0, -0.001f);
+	D3DXMatrixTranslation(&matWorld, -0.87f, 0, 0.f);
 	D3DXMatrixScaling(&matScale, 0.88f * (1.f - m_fRate), 0.9f, 0.9f);
-	m_matSubWorld = matTrans * matScale * matWorld;
+	m_matSubWorld = matTrans * matScale * matWorld * m_matWorld;
 	
 	m_pDistance->Render(pD3D->GetDeviceContext());
 	pLightShader->Render(pD3D->GetDeviceContext(), m_pDistance->GetIndexCount(), m_matSubWorld, m_pCamera->GetView(),
