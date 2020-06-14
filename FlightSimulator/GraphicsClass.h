@@ -12,6 +12,7 @@ using namespace std;
 #include "InputClass.h"
 #include "LightClass.h"
 
+class SoundClass;
 class CollisionMgr;
 class GameObjectMgr;
 class GameObject;
@@ -54,5 +55,7 @@ private:
 
 	GameObject* m_pPlayer;
 	list<GameObject*> m_plistAs;
+
+	SoundClass* m_pHitSound;
 };
 

@@ -7,6 +7,7 @@ SystemClass::SystemClass()
 	m_pFps = 0;
 	m_pCpu = 0;
 	m_pTimer = 0;
+	m_Sound = 0;
 }
 
 SystemClass::SystemClass(const SystemClass& other)
@@ -90,11 +91,33 @@ bool SystemClass::Initialize()
 		return false;
 	}
 
+	// Create the sound object.
+	m_Sound = new SoundClass;
+	if (!m_Sound)
+	{
+		return false;
+	}
+	// Initialize the sound object.
+	result = m_Sound->InitializeBGM(m_hWnd);
+	if (!result)
+	{
+		MessageBox(m_hWnd, L"Could not initialize Direct Sound.", L"Error", MB_OK);
+		return false;
+	}
+
 	return true;
 }
 
 void SystemClass::Shutdown()
 {
+	// Release the sound object.
+	if (m_Sound)
+	{
+		m_Sound->Shutdown();
+		delete m_Sound;
+		m_Sound = 0;
+	}
+
 	// Release the graphics object.
 	if (m_pGraphics)
 	{

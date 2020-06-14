@@ -9,6 +9,7 @@
 #include "FpsClass.h"
 #include "CpuClass.h"
 #include "TimerClass.h"
+#include "SoundClass.h"
 
 class SystemClass
 {
@@ -36,7 +37,10 @@ private:
 	FpsClass* m_pFps;
 	CpuClass* m_pCpu;
 	TimerClass* m_pTimer;
-};// Function prototypes
+	SoundClass* m_Sound;
+};
+
+// Function prototypes
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 // Globals
 static SystemClass* ApplicationHandle = 0;

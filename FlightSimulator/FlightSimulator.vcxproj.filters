@@ -103,6 +103,9 @@
     <Filter Include="WinMain\ClientClass\DistanceUI">
       <UniqueIdentifier>{ad873e53-bb44-43fd-a705-257d2d654abe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WinMain\SystemClass\SoundClass">
+      <UniqueIdentifier>{62c42df7-34b1-4f5c-852a-a29f69b85585}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputClass.cpp">
@@ -189,6 +192,9 @@
     <ClCompile Include="Collision.cpp">
       <Filter>WinMain\ManagerClass\CollisionMgr\Collision</Filter>
     </ClCompile>
+    <ClCompile Include="SoundClass.cpp">
+      <Filter>WinMain\SystemClass\SoundClass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InputClass.h">
@@ -271,6 +277,9 @@
     </ClInclude>
     <ClInclude Include="Collision.h">
       <Filter>WinMain\ManagerClass\CollisionMgr\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundClass.h">
+      <Filter>WinMain\SystemClass\SoundClass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

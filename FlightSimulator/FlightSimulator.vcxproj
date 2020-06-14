@@ -42,6 +42,7 @@
     <ClCompile Include="Planet.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="SoundClass.cpp" />
     <ClCompile Include="SystemClass.cpp" />
     <ClCompile Include="TextClass.cpp" />
     <ClCompile Include="TextureClass.cpp" />
@@ -71,6 +72,7 @@
     <ClInclude Include="Planet.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="SoundClass.h" />
     <ClInclude Include="SystemClass.h" />
     <ClInclude Include="TextClass.h" />
     <ClInclude Include="TextureClass.h" />

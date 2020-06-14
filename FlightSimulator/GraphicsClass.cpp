@@ -9,6 +9,7 @@
 #include "Skybox.h"
 #include "Asteroid.h"
 #include "DistanceUI.h"
+#include "SoundClass.h"
 
 #include<cstdlib>
 #include<ctime>
@@ -24,6 +25,8 @@ GraphicsClass::GraphicsClass()
 
 	m_pGameObjectMgr = 0;
 	m_pCollisionMgr = 0;
+
+	m_pHitSound = 0;
 }
 
 GraphicsClass::GraphicsClass(const GraphicsClass& other)
@@ -101,6 +104,10 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_pLight->SetDiffuseColor(1.f, 1.f, 1.f, 1.f);
 	m_pLight->SetSpecularColor(1.f, 1.f, 1.f, 1.f);
 	m_pLight->SetSpecularPower(32.f);
+
+	m_pHitSound = new SoundClass;
+	if (!m_pHitSound->InitializeSound(hwnd, "../Engine/data/sound01.wav"))
+		return false;
 
 	m_pGameObjectMgr = new GameObjectMgr;
 	if (!m_pGameObjectMgr)
@@ -205,6 +212,12 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 void GraphicsClass::Shutdown()
 {
+	if (m_pHitSound)
+	{
+		m_pHitSound->Shutdown();
+		delete m_pHitSound;
+		m_pHitSound = 0;
+	}
 	// Release the text object.
 	if (m_pText)
 	{
@@ -286,6 +299,7 @@ bool GraphicsClass::Frame(int fps, int cpu, float frameTime)
 
 	if (m_pCollisionMgr->UpdateCollsion(Collision::COL_PLAYER, Collision::COL_ASEROID))
 	{
+		m_pHitSound->PlayGameSound();
 		list<GameObject*>::iterator iter;
 		for (iter = m_plistAs.begin(); iter != m_plistAs.end();) {
 			if (10.f > dynamic_cast<Asteroid*>(*iter)->Get_Collision()->Get_Radius())
