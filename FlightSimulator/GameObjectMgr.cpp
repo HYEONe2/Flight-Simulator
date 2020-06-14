@@ -134,3 +134,17 @@ void GameObjectMgr::Shutdown()
 
 	m_GameObjectLst.clear();
 }
+
+int GameObjectMgr::Get_PolySize()
+{
+	int Polycnt = 0;
+	for (auto iter : m_GameObjectLst)
+	{
+		if (iter)
+		{
+			Polycnt += (iter->GetVertexCount()/3);
+		}
+	}
+
+	return Polycnt;
+}

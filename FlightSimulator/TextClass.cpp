@@ -7,6 +7,8 @@ TextClass::TextClass()
 	m_pFpsSentence = 0;
 	m_pCpuSentence = 0;
 	m_pPolySentence = 0;
+	m_pObjSentence = 0;
+	m_pScreenSentence = 0;
 }
 
 TextClass::TextClass(const TextClass& other)
@@ -75,6 +77,18 @@ bool TextClass::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceCont
 	{
 		return false;
 	}
+	// Initialize the first sentence.
+	result = InitializeSentence(&m_pScreenSentence, 64, device);
+	if (!result)
+	{
+		return false;
+	}
+	// Initialize the first sentence.
+	result = InitializeSentence(&m_pObjSentence, 32, device);
+	if (!result)
+	{
+		return false;
+	}
 
 	return true;
 }
@@ -87,6 +101,10 @@ void TextClass::Shutdown()
 	ReleaseSentence(&m_pCpuSentence);
 	// Release the first sentence.
 	ReleaseSentence(&m_pPolySentence);
+	// Release the first sentence.
+	ReleaseSentence(&m_pScreenSentence);
+	// Release the first sentence.
+	ReleaseSentence(&m_pObjSentence);
 
 	// Release the second sentence.
 	if (m_pFontShader)
@@ -190,6 +208,53 @@ bool TextClass::SetSentence(int Cnt, ID3D11DeviceContext *deviceContext)
 	return true;
 }
 
+bool TextClass::SetScreen(int width, int heigh, ID3D11DeviceContext *deviceContext)
+{
+	char tempString[30];
+	char widthString[64];
+	char heightString[30];
+	bool result;
+	// Convert the cpu integer to string format.
+	_itoa_s(width, tempString, 10);
+	// Setup the cpu string.
+	strcpy_s(widthString, "Screen (Width,Height) : ( ");
+	strcat_s(widthString, tempString);
+	strcat_s(widthString, ", ");
+
+	_itoa_s(heigh, tempString, 10);
+	strcat_s(widthString, tempString);
+	strcpy_s(heightString, " )");
+	strcat_s(widthString, heightString);
+
+	// Update the sentence vertex buffer with the new string information.
+	result = UpdateSentence(m_pScreenSentence, widthString, 20, 100, 0.0f, 1.0f, 0.0f, deviceContext);
+	if (!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool TextClass::SetObject(int obj, ID3D11DeviceContext *deviceContext)
+{
+	char tempString[30];
+	char objString[30];
+	bool result;
+	// Convert the cpu integer to string format.
+	_itoa_s(obj, tempString, 10);
+	// Setup the cpu string.
+	strcpy_s(objString, "Object Count: ");
+	strcat_s(objString, tempString);
+	// Update the sentence vertex buffer with the new string information.
+	result = UpdateSentence(m_pObjSentence, objString, 20, 80, 0.0f, 1.0f, 0.0f, deviceContext);
+	if (!result)
+	{
+		return false;
+	}
+	return true;
+}
+
 
 bool TextClass::Render(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX
 	orthoMatrix)
@@ -213,6 +278,18 @@ bool TextClass::Render(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatri
 	}
 	// Draw the first sentence.
 	result = RenderSentence(deviceContext, m_pPolySentence, worldMatrix, orthoMatrix);
+	if (!result)
+	{
+		return false;
+	}
+	// Draw the first sentence.
+	result = RenderSentence(deviceContext, m_pScreenSentence, worldMatrix, orthoMatrix);
+	if (!result)
+	{
+		return false;
+	}
+	// Draw the first sentence.
+	result = RenderSentence(deviceContext, m_pObjSentence, worldMatrix, orthoMatrix);
 	if (!result)
 	{
 		return false;

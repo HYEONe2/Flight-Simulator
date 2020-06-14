@@ -40,7 +40,6 @@ GraphicsClass::~GraphicsClass()
 bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 {
 	bool result;    
-	int iPolyCnt = 0;
 	srand(unsigned int(time(NULL)));
 
 	// Create the Direct3D object.  
@@ -123,43 +122,36 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	pGameObject->InitializeForCube(m_pD3D->GetDevice(), "../Engine/data/Cube.txt", L"../Engine/data/Skybox.jpg");
 	dynamic_cast<Skybox*>(pGameObject)->SetD3D(m_pD3D);
 	dynamic_cast<Skybox*>(pGameObject)->SetCamera(m_pCamera);
-	iPolyCnt += (pGameObject->GetVertexCount() / 3);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
 
 	pGameObject = new Planet;
 	dynamic_cast<Planet*>(pGameObject)->Init(10.f);
 	pGameObject->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Moon/Moon 2K.obj", L"../Engine/data/Moon/Diffuse_2K.png");
-	iPolyCnt += (pGameObject->GetVertexCount() / 3);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
 
 	pGameObject = new Planet;
 	dynamic_cast<Planet*>(pGameObject)->Init(50.f);
 	pGameObject->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Mercury/Mercury 1K.obj", L"../Engine/data/Mercury/Diffuse_1K.png");
-	iPolyCnt += (pGameObject->GetVertexCount() / 3);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
 
 	pGameObject = new Planet;
 	dynamic_cast<Planet*>(pGameObject)->Init(110.f);
 	pGameObject->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Venus/Venus_1K.obj", L"../Engine/data/Venus/Atmosphere_2K.png");
-	iPolyCnt += (pGameObject->GetVertexCount() / 3);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
 
 	pGameObject = new Planet;
 	dynamic_cast<Planet*>(pGameObject)->Init(210.f);
 	pGameObject->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Earth/Earth 2K.obj", L"../Engine/data/Earth/Diffuse_2K.png");
-	iPolyCnt += (pGameObject->GetVertexCount() / 3);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
 
 	pGameObject = new Planet;
 	dynamic_cast<Planet*>(pGameObject)->Init(410.f);
 	pGameObject->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Mars/Mars 2K.obj", L"../Engine/data/Mars/Diffuse_2K.png");
-	iPolyCnt += (pGameObject->GetVertexCount() / 3);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
 
 	pGameObject = new Planet;
 	dynamic_cast<Planet*>(pGameObject)->Init(700.f, 0.3f);
 	pGameObject->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Jupiter/13905_Jupiter_V1_l3.obj", L"../Engine/data/Jupiter/Jupiter_diff.jpg");
-	iPolyCnt += (pGameObject->GetVertexCount() / 3);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
 
 	Collision* pCollision;
@@ -172,7 +164,6 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		pGameObject = new Asteroid;
 		dynamic_cast<Asteroid*>(pGameObject)->Init({ 350.f - (1.f*x_RanNum),50.f - (y_RanNum*1.0f),350.f - (1.f*z_RanNum) });
 		pGameObject->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Asteroid/10464_Asteroid_v1_Iterations-2.obj", L"../Engine/data/Asteroid/10464_Asteroid_v1_diffuse.jpg");
-		iPolyCnt += (pGameObject->GetVertexCount() / 3);
 		m_pGameObjectMgr->PushGameObject(pGameObject);
 
 		pCollision = dynamic_cast<Asteroid*>(pGameObject)->Get_Collision();
@@ -183,7 +174,6 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_pPlayer = new Player;
 	dynamic_cast<Player*>(m_pPlayer)->Init(m_pCamera, m_pInputClass);
 	dynamic_cast<Player*>(m_pPlayer)->Init(m_pD3D->GetDevice());
-	iPolyCnt += (m_pPlayer->GetVertexCount() / 3);
 	m_pGameObjectMgr->PushGameObject(m_pPlayer);
 	pCollision = dynamic_cast<Player*>(m_pPlayer)->Get_Collision();
 	m_pCollisionMgr->PushCollObject(Collision::COL_PLAYER, pCollision);
@@ -198,11 +188,12 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	dynamic_cast<DistanceUI*>(pGameObject)->Init(m_pD3D);
 	dynamic_cast<DistanceUI*>(pGameObject)->SetCamera(m_pCamera);
 	dynamic_cast<DistanceUI*>(pGameObject)->SetPlayer(m_pPlayer);
-	iPolyCnt += (pGameObject->GetVertexCount() / 3);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
 
+
+
 	// Set the Vertex .
-	result = m_pText->SetSentence(iPolyCnt, m_pD3D->GetDeviceContext());
+	result = m_pText->SetScreen(screenWidth,screenHeight, m_pD3D->GetDeviceContext());
 	if (!result)
 		return false;
 
@@ -312,6 +303,16 @@ bool GraphicsClass::Frame(int fps, int cpu, float frameTime)
 				iter++;
 		}
 	}
+	// Set the cpu usage.
+	result = m_pText->SetObject(m_pGameObjectMgr->Get_Size(), m_pD3D->GetDeviceContext());
+	if (!result)
+	{
+		return false;
+	}
+	// Set the Vertex .
+	result = m_pText->SetSentence(m_pGameObjectMgr->Get_PolySize() , m_pD3D->GetDeviceContext());
+	if (!result)
+		return false;
 
 	result = Render();
 	if(!result)

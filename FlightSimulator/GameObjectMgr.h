@@ -26,6 +26,10 @@ public:
 	void EraseGameObject(GameObject* pGameObject);
 	void Shutdown();
 
+	int Get_Size() { return m_GameObjectLst.size(); }
+	int Get_PolySize();
+
+
 private:
 	list<GameObject*> m_GameObjectLst;
 };
