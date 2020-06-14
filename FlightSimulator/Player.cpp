@@ -33,6 +33,7 @@ void Player::Init(CameraClass *pCamera, InputClass *pInput)
 	m_pInput = pInput;
 	m_pCamera = pCamera;
 	m_pCamera->SetPos(650.f, 0.f, -600.f);
+	SetPos(D3DXVECTOR3(650.f, 0.f, -600.f));
 
 	m_pCollision = new Collision;
 	m_pCollision->Init(Collision::COL_PLAYER, pCamera->GetPos(), 1.0f);
@@ -52,6 +53,7 @@ void Player::Init(ID3D11Device *device)
 bool Player::Frame(float fFrameTime)
 {
 	Move(fFrameTime);
+	m_pCamera->MoveCamera(CameraClass::MOVE_FORWARD, fFrameTime*m_fSpeed);
 
 	if (m_pCollision)
 		m_pCollision->UpdatePos(m_pCamera->GetPos());
@@ -223,8 +225,8 @@ void Player::CheckSpeed(CameraClass::MOVE eMove, float fFrameTime, bool bCheck)
 	{
 		if (bCheck)
 		{
-			if (m_fSpeed <= 0)
-				m_fSpeed = 0;
+			if (m_fSpeed <= 1.f)
+				m_fSpeed = 1.f;
 
 			m_fSpeed -= fFrameTime * 0.002f;
 		}

@@ -5,6 +5,9 @@
 #include "LightClass.h"
 #include "CameraClass.h"
 
+#include <iostream>
+using namespace std;
+
 DistanceUI::DistanceUI()
 {
 	Init();
@@ -17,6 +20,12 @@ DistanceUI::DistanceUI(DistanceUI &)
 DistanceUI::~DistanceUI()
 {
 	Shutdown();
+}
+
+void DistanceUI::SetOriginDist(D3DXVECTOR3 vOriginPos, D3DXVECTOR3 vMoonPos)
+{
+	m_vMoonPos = vMoonPos;
+	m_fOriginDist = sqrtf(pow((vMoonPos.x - vOriginPos.x), 2) + pow((vMoonPos.y - vOriginPos.y), 2) + pow((vMoonPos.z - vOriginPos.z), 2));
 }
 
 void DistanceUI::Init()
@@ -32,10 +41,20 @@ void DistanceUI::Init(D3DClass * pD3D)
 	m_pDistance->Initialize(pD3D->GetDevice(), L"../Engine/data/UI/Distance.png");
 }
 
-bool DistanceUI::Frame(float)
+bool DistanceUI::Frame(float fFrameTime)
 {
-	D3DXMATRIX matScale, matTrans;
-	
+	m_vPlayerPos = m_pPlayer->GetPos();
+	float fDist = sqrtf(pow((m_vMoonPos.x - m_vPlayerPos.x), 2) + pow((m_vMoonPos.y - m_vPlayerPos.y), 2) + pow((m_vMoonPos.z - m_vPlayerPos.z), 2));
+
+	m_fRate = fDist / m_fOriginDist;
+
+	return false;
+}
+
+void DistanceUI::Render(D3DClass * pD3D, LightShaderClass * pLightShader, LightClass * pLight)
+{
+	D3DXMATRIX matScale, matTrans, matWorld;
+
 	D3DXVECTOR3 vPlayerPos = m_pPlayer->GetPos();
 	D3DXVECTOR3 vDir = { m_pCamera->GetLook().x, m_pCamera->GetLook().y, m_pCamera->GetLook().z };
 	D3DXVec3Normalize(&vDir, &vDir);
@@ -50,15 +69,20 @@ bool DistanceUI::Frame(float)
 	D3DXMatrixScaling(&matScale, 0.4f, 0.02f, 0.4f);
 	m_matWorld = matTrans * matScale * matBill;
 
-	D3DXMatrixTranslation(&matTrans, 0.015f, 0, -0.001f);
-	D3DXMatrixScaling(&matScale, 0.88f, 0.9f, 0.9f);
-	m_matSubWorld = matTrans* matScale * m_matWorld;
+	if (m_fRate < 0.01f)
+		m_fRate = 0.f;
+	if (m_fRate >= 1.f)
+		m_fRate = 1.f;
 
-	return false;
-}
-
-void DistanceUI::Render(D3DClass * pD3D, LightShaderClass * pLightShader, LightClass * pLight)
-{
+	matWorld = m_matWorld;
+	matWorld._41 = matBill._41 -0.2f;
+	//matWorld._42 = matBill._42 /*-0.1f*/;
+	cout << matWorld._43 << endl;
+	matWorld._43 = matWorld._43 -0.1f;
+	D3DXMatrixTranslation(&matTrans, 1.01f, 0, -0.001f);
+	D3DXMatrixScaling(&matScale, 0.88f * (1.f - m_fRate), 0.9f, 0.9f);
+	m_matSubWorld = matTrans * matScale * matWorld;
+	
 	m_pDistance->Render(pD3D->GetDeviceContext());
 	pLightShader->Render(pD3D->GetDeviceContext(), m_pDistance->GetIndexCount(), m_matSubWorld, m_pCamera->GetView(),
 		pD3D->GetProj(), m_pDistance->GetTexture(), pLight->GetDirection(), pLight->GetAmbientColor(),

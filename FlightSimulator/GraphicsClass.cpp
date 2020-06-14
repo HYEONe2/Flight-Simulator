@@ -124,10 +124,12 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	dynamic_cast<Skybox*>(pGameObject)->SetCamera(m_pCamera);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
 
+	D3DXVECTOR3 vMoonPos{ 0,0,0 };
 	pGameObject = new Planet;
 	dynamic_cast<Planet*>(pGameObject)->Init(10.f);
 	pGameObject->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Moon/Moon 2K.obj", L"../Engine/data/Moon/Diffuse_2K.png");
 	m_pGameObjectMgr->PushGameObject(pGameObject);
+	vMoonPos = pGameObject->GetPos();
 
 	pGameObject = new Planet;
 	dynamic_cast<Planet*>(pGameObject)->Init(50.f);
@@ -188,9 +190,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	dynamic_cast<DistanceUI*>(pGameObject)->Init(m_pD3D);
 	dynamic_cast<DistanceUI*>(pGameObject)->SetCamera(m_pCamera);
 	dynamic_cast<DistanceUI*>(pGameObject)->SetPlayer(m_pPlayer);
+	dynamic_cast<DistanceUI*>(pGameObject)->SetOriginDist(m_pPlayer->GetPos(), vMoonPos);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
-
-
 
 	// Set the Vertex .
 	result = m_pText->SetScreen(screenWidth,screenHeight, m_pD3D->GetDeviceContext());
@@ -290,7 +291,7 @@ bool GraphicsClass::Frame(int fps, int cpu, float frameTime)
 
 	if (m_pCollisionMgr->UpdateCollsion(Collision::COL_PLAYER, Collision::COL_ASEROID))
 	{
-		m_pHitSound->PlayGameSound();
+		//m_pHitSound->PlayGameSound();
 		list<GameObject*>::iterator iter;
 		for (iter = m_plistAs.begin(); iter != m_plistAs.end();) {
 			if (10.f > dynamic_cast<Asteroid*>(*iter)->Get_Collision()->Get_Radius())

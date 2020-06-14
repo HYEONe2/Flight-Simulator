@@ -18,6 +18,7 @@ public:
 public:
 	void SetCamera(CameraClass* pCamera) { m_pCamera = pCamera; }
 	void SetPlayer(GameObject* pPlayer) { m_pPlayer = pPlayer; }
+	void SetOriginDist(D3DXVECTOR3 vOriginPos, D3DXVECTOR3 vMoonPos);
 
 public:
 	void Init();
@@ -35,5 +36,11 @@ private:
 
 	ModelClass* m_pDistance;
 	D3DXMATRIX m_matSubWorld;
+
+	D3DXVECTOR3 m_vPlayerPos;
+	D3DXVECTOR3 m_vMoonPos;
+
+	float m_fOriginDist = 0;
+	float m_fRate = 0;
 };
 

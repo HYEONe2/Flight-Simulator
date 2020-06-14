@@ -46,7 +46,7 @@ private:
 	ModelClass* m_pEffect;
 	Collision* m_pCollision;
 
-	float m_fSpeed = 0.f;
+	float m_fSpeed = 1.f;
 	float m_fMaxSpeed = 10.f;
 
 	float m_fRotSpeed[2] { 0.f,0.f };
