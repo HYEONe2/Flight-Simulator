@@ -105,7 +105,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_pLight->SetSpecularPower(32.f);
 
 	m_pHitSound = new SoundClass;
-	if (!m_pHitSound->InitializeSound(hwnd, "../Engine/data/sound01.wav"))
+	if (!m_pHitSound->InitializeSound(hwnd, "../Engine/data/Mirror Shattering-SoundBible.com-1752328245.wav"))
 		return false;
 
 	m_pGameObjectMgr = new GameObjectMgr;
@@ -175,7 +175,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 	m_pPlayer = new Player;
 	dynamic_cast<Player*>(m_pPlayer)->Init(m_pCamera, m_pInputClass);
-	dynamic_cast<Player*>(m_pPlayer)->Init(m_pD3D->GetDevice());
+	dynamic_cast<Player*>(m_pPlayer)->Init(m_pD3D->GetDevice(),hwnd);
 	m_pGameObjectMgr->PushGameObject(m_pPlayer);
 	pCollision = dynamic_cast<Player*>(m_pPlayer)->Get_Collision();
 	m_pCollisionMgr->PushCollObject(Collision::COL_PLAYER, pCollision);
@@ -291,7 +291,7 @@ bool GraphicsClass::Frame(int fps, int cpu, float frameTime)
 
 	if (m_pCollisionMgr->UpdateCollsion(Collision::COL_PLAYER, Collision::COL_ASEROID))
 	{
-		//m_pHitSound->PlayGameSound();
+		m_pHitSound->PlayGameSound();
 		list<GameObject*>::iterator iter;
 		for (iter = m_plistAs.begin(); iter != m_plistAs.end();) {
 			if (10.f > dynamic_cast<Asteroid*>(*iter)->Get_Collision()->Get_Radius())

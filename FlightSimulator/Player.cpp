@@ -5,6 +5,8 @@
 #include "LightShaderClass.h"
 #include "LightClass.h"
 #include "Collision.h"
+#include "SoundClass.h"
+
 
 Player::Player()
 {
@@ -26,6 +28,8 @@ void Player::Init()
 	m_pEffect = 0;
 	m_pCamera = 0;
 	m_pInput = 0;
+	m_pEngineSound = 0;
+
 }
 
 void Player::Init(CameraClass *pCamera, InputClass *pInput)
@@ -41,13 +45,16 @@ void Player::Init(CameraClass *pCamera, InputClass *pInput)
 	m_eTag = TAG_PLAYER;
 }
 
-void Player::Init(ID3D11Device *device)
+void Player::Init(ID3D11Device *device, HWND hwnd)
 {
 	m_pCockpit = new ModelClass;
 	m_pCockpit->Initialize(device, L"../Engine/data/Player/Player.png");
 
 	m_pEffect = new ModelClass;
 	m_pEffect->Initialize(device, L"../Engine/data/Player/Damage.png");
+
+	m_pEngineSound = new SoundClass;
+	m_pEngineSound->InitializeSound(hwnd, "../Engine/data/Power-Up-KP-1879176533.wav");
 }
 
 bool Player::Frame(float fFrameTime)
@@ -165,6 +172,12 @@ void Player::Shutdown()
 		delete m_pEffect;
 		m_pEffect = 0;
 	}
+
+	if (m_pEngineSound)
+	{
+		delete m_pEngineSound;
+		m_pEngineSound = 0;
+	}
 }
 
 void Player::Move(float fFrameTime)
@@ -174,11 +187,16 @@ void Player::Move(float fFrameTime)
 
 	if (m_pInput->KeyPressing(DIK_W))
 	{
+		if (!m_bSoundInit) {
+			m_pEngineSound->PlayGameSound();
+			m_bSoundInit = true;
+		}
 		CheckSpeed(CameraClass::MOVE_FORWARD, fFrameTime);
 		m_pCamera->MoveCamera(CameraClass::MOVE_FORWARD, fFrameTime*m_fSpeed);
 	}
 	else
 	{
+		m_bSoundInit = false;
 		CheckSpeed(CameraClass::MOVE_FORWARD, fFrameTime, true);
 		m_pCamera->MoveCamera(CameraClass::MOVE_FORWARD, fFrameTime*m_fSpeed);
 	}

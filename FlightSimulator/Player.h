@@ -8,6 +8,8 @@ class InputClass;
 class LightShaderClass;
 class LightClass;
 class Collision;
+class SoundClass;
+
 
 class Player :
 	public GameObject
@@ -27,7 +29,7 @@ public:
 public:
 	void Init();
 	void Init(CameraClass*, InputClass*);
-	void Init(ID3D11Device*);
+	void Init(ID3D11Device*, HWND);
 
 	virtual bool Frame(float);
 	void Render(D3DClass*, LightShaderClass*, LightClass*);
@@ -45,6 +47,7 @@ private:
 	ModelClass* m_pCockpit;
 	ModelClass* m_pEffect;
 	Collision* m_pCollision;
+	SoundClass* m_pEngineSound;
 
 	float m_fSpeed = 1.f;
 	float m_fMaxSpeed = 10.f;
@@ -56,5 +59,7 @@ private:
 	bool m_bReverse = false;
 	float m_fAlpha = 0.f;
 	float m_fStayTime = 0.f;
+	bool m_bSoundInit = false;
+
 };
 
