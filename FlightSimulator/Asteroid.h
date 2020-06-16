@@ -27,7 +27,7 @@ private:
 	D3DXVECTOR3 m_vPos;
 	D3DXVECTOR3 m_vDir;
 	bool m_bIsCloser;
-
-
+	float m_fDist = 0.f;
+	bool m_bIsdown = false;
 };
 

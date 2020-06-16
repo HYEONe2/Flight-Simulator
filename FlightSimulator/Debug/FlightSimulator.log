@@ -1,37 +1,6 @@
 ﻿  Asteroid.cpp
-  BitmapClass.cpp
-  CameraClass.cpp
-  Collision.cpp
-  CollisionMgr.cpp
-  ColorShaderClass.cpp
-  CpuClass.cpp
-  D3DClass.cpp
-  DistanceUI.cpp
-  FontClass.cpp
-  FontShaderClass.cpp
-  FpsClass.cpp
-  GameObject.cpp
-  GameObjectMgr.cpp
   GraphicsClass.cpp
-  InputClass.cpp
-  LightClass.cpp
-  LightShaderClass.cpp
-  Main.cpp
-  ModelClass.cpp
   코드를 생성하고 있습니다...
 c:\users\rkek3\documents\github\flight-simulator\flightsimulator\gameobject.h(28): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
 c:\users\rkek3\documents\github\flight-simulator\flightsimulator\gameobject.h(28): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
-c:\users\rkek3\documents\github\flight-simulator\flightsimulator\gameobject.h(28): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
-  컴파일하고 있습니다...
-  Planet.cpp
-  Player.cpp
-  Skybox.cpp
-  SoundClass.cpp
-  SystemClass.cpp
-  TextClass.cpp
-  TextureClass.cpp
-  TextureShaderClass.cpp
-  TimerClass.cpp
-  코드를 생성하고 있습니다...
-  LINK : C:\Users\rkek3\Documents\GitHub\Flight-Simulator\Debug\FlightSimulator.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
   FlightSimulator.vcxproj -> C:\Users\rkek3\Documents\GitHub\Flight-Simulator\Debug\FlightSimulator.exe

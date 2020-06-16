@@ -157,7 +157,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_pGameObjectMgr->PushGameObject(pGameObject);
 
 	Collision* pCollision;
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 50; i++)
 	{
 		int x_RanNum = rand() % 700;
 		int y_RanNum = rand() % 100;
