@@ -28,7 +28,7 @@ bool SystemClass::Initialize()
 	iScreenHeight = 0;
 	
 	// Initialize the windows api.
-	InitializeWindows(iScreenWidth, iScreenHeight);
+ 	InitializeWindows(iScreenWidth, iScreenHeight);
 	
 	// Create the input object. This object will be used to handle reading the keyboard input from the user.
 	m_pInput = new InputClass;

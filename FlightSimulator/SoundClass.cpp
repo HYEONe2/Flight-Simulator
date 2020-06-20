@@ -25,7 +25,7 @@ bool SoundClass::InitializeBGM(HWND hwnd)
 		return false;
 	}
 	// Load a wave audio file onto a secondary buffer.
-	result = LoadWaveFile("../Engine/data/Cargo Plane Cabin Ambiance-SoundBible.com-589803489.wav", &m_secondaryBuffer1);
+	result = LoadWaveFile("../Engine/data/Sound/BGM.wav", &m_secondaryBuffer1);
 	if (!result)
 	{
 		return false;
@@ -211,6 +211,7 @@ bool SoundClass::LoadWaveFile(char* filename, IDirectSoundBuffer8** secondaryBuf
 	{
 		return false;
 	}
+
 	// Check for the data chunk header.
 	if ((waveFileHeader.dataChunkId[0] != 'd') || (waveFileHeader.dataChunkId[1] != 'a') ||
 		(waveFileHeader.dataChunkId[2] != 't') || (waveFileHeader.dataChunkId[3] != 'a'))

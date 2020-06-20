@@ -21,7 +21,7 @@ class GameObject;
 const bool FULL_SCREEN = false;
 // 주사율을 맞춰주는 것
 const bool VSYNC_ENABLED = false; 
-const float SCREEN_DEPTH = 1000.0f;
+const float SCREEN_DEPTH = 2500.f;
 const float SCREEN_NEAR = 0.1f;
 	
 class GraphicsClass

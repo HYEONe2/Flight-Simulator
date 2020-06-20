@@ -9,6 +9,8 @@
 #include "Skybox.h"
 #include "Asteroid.h"
 #include "DistanceUI.h"
+#include "HpUI.h"
+#include "EndingUI.h"
 #include "SoundClass.h"
 
 #include<cstdlib>
@@ -105,7 +107,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_pLight->SetSpecularPower(32.f);
 
 	m_pHitSound = new SoundClass;
-	if (!m_pHitSound->InitializeSound(hwnd, "../Engine/data/Mirror Shattering-SoundBible.com-1752328245.wav"))
+	if (!m_pHitSound->InitializeSound(hwnd, "../Engine/data/Sound/CriticalSound.wav"))
 		return false;
 
 	m_pGameObjectMgr = new GameObjectMgr;
@@ -159,12 +161,12 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	Collision* pCollision;
 	for (int i = 0; i < 50; i++)
 	{
-		int x_RanNum = rand() % 700;
-		int y_RanNum = rand() % 100;
-		int z_RanNum = rand() % 700;
+		int x_RanNum = rand() % 400;
+		int y_RanNum = rand() % 200;
+		int z_RanNum = rand() % 400;
 
 		pGameObject = new Asteroid;
-		dynamic_cast<Asteroid*>(pGameObject)->Init({ 350.f - (1.f*x_RanNum),50.f - (y_RanNum*1.0f),350.f - (1.f*z_RanNum) });
+		dynamic_cast<Asteroid*>(pGameObject)->Init({  (1.f*x_RanNum),100.f - (y_RanNum*1.0f), - (1.f*z_RanNum) });
 		pGameObject->InitializeForRectObj(m_pD3D->GetDevice(), L"../Engine/data/Asteroid/10464_Asteroid_v1_Iterations-2.obj", L"../Engine/data/Asteroid/10464_Asteroid_v1_diffuse.jpg");
 		m_pGameObjectMgr->PushGameObject(pGameObject);
 
@@ -192,6 +194,19 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	dynamic_cast<DistanceUI*>(pGameObject)->SetPlayer(m_pPlayer);
 	dynamic_cast<DistanceUI*>(pGameObject)->SetOriginDist(m_pPlayer->GetPos(), vMoonPos);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
+
+	pGameObject = new HpUI;
+	pGameObject->Initialize(m_pD3D->GetDevice(), L"../Engine/data/UI/HpUI.png");
+	dynamic_cast<HpUI*>(pGameObject)->SetCamera(m_pCamera);
+	dynamic_cast<HpUI*>(pGameObject)->SetPlayer(m_pPlayer);
+	m_pGameObjectMgr->PushGameObject(pGameObject);
+
+	pGameObject = new EndingUI;
+	pGameObject->Initialize(m_pD3D->GetDevice(), L"../Engine/data/UI/Ending.png");
+	dynamic_cast<EndingUI*>(pGameObject)->Init(m_pD3D);
+	dynamic_cast<EndingUI*>(pGameObject)->SetCamera(m_pCamera);
+	m_pGameObjectMgr->PushGameObject(pGameObject);
+	dynamic_cast<Player*>(m_pPlayer)->SetEndingUI(dynamic_cast<EndingUI*>(pGameObject));
 
 	// Set the Vertex .
 	result = m_pText->SetScreen(screenWidth,screenHeight, m_pD3D->GetDeviceContext());
@@ -297,6 +312,7 @@ bool GraphicsClass::Frame(int fps, int cpu, float frameTime)
 			if (10.f > dynamic_cast<Asteroid*>(*iter)->Get_Collision()->Get_Radius())
 			{
 				dynamic_cast<Player*>(m_pPlayer)->SetEffectOn();
+				dynamic_cast<Player*>(m_pPlayer)->SetDamage();
 				m_pGameObjectMgr->EraseGameObject(*iter);
 				iter = m_plistAs.erase(iter);
 			}

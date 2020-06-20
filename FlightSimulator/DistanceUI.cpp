@@ -32,7 +32,7 @@ void DistanceUI::Init()
 {
 	m_pDistance = 0;
 
-	m_eTag = TAG_UI;
+	m_eTag = TAG_DISTANCEUI;
 }
 
 void DistanceUI::Init(D3DClass * pD3D)
@@ -48,7 +48,7 @@ bool DistanceUI::Frame(float fFrameTime)
 
 	m_fRate = fDist / m_fOriginDist;
 
-	return false;
+	return true;
 }
 
 void DistanceUI::Render(D3DClass * pD3D, LightShaderClass * pLightShader, LightClass * pLight)

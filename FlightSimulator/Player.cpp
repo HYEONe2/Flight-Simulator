@@ -6,7 +6,7 @@
 #include "LightClass.h"
 #include "Collision.h"
 #include "SoundClass.h"
-
+#include "EndingUI.h"
 
 Player::Player()
 {
@@ -29,7 +29,8 @@ void Player::Init()
 	m_pCamera = 0;
 	m_pInput = 0;
 	m_pEngineSound = 0;
-
+	m_pSuccessSound = 0;
+	m_pFailSound = 0;
 }
 
 void Player::Init(CameraClass *pCamera, InputClass *pInput)
@@ -37,7 +38,7 @@ void Player::Init(CameraClass *pCamera, InputClass *pInput)
 	m_pInput = pInput;
 	m_pCamera = pCamera;
 	m_pCamera->SetPos(650.f, 0.f, -600.f);
-	SetPos(D3DXVECTOR3(650.f, 0.f, -600.f));
+	SetPos(m_pCamera->GetPos());
 
 	m_pCollision = new Collision;
 	m_pCollision->Init(Collision::COL_PLAYER, pCamera->GetPos(), 1.0f);
@@ -54,45 +55,32 @@ void Player::Init(ID3D11Device *device, HWND hwnd)
 	m_pEffect->Initialize(device, L"../Engine/data/Player/Damage.png");
 
 	m_pEngineSound = new SoundClass;
-	m_pEngineSound->InitializeSound(hwnd, "../Engine/data/Power-Up-KP-1879176533.wav");
+	m_pEngineSound->InitializeSound(hwnd, "../Engine/data/Sound/EngineSound.wav");
+
+	m_pSuccessSound = new SoundClass;
+	m_pSuccessSound->InitializeSound(hwnd, "../Engine/data/Sound/SuccessSound.wav");
+
+	m_pFailSound = new SoundClass;
+	m_pFailSound->InitializeSound(hwnd, "../Engine/data/Sound/FailSound.wav");
 }
 
 bool Player::Frame(float fFrameTime)
 {
+	if (CheckWinFail())
+	{
+		if (m_pInput->KeyDown(DIK_RETURN))
+			ResetPlayer();
+	
+		return true;
+	}
+
 	Move(fFrameTime);
 	m_pCamera->MoveCamera(CameraClass::MOVE_FORWARD, fFrameTime*m_fSpeed);
 
 	if (m_pCollision)
 		m_pCollision->UpdatePos(m_pCamera->GetPos());
 
-	if (m_bRenderEffect)
-	{
-		if (m_fAlpha < 0.f)
-		{
-			m_fAlpha = 0.f;
-			m_fStayTime = 0.f;
-			m_bReverse = false;
-			m_bRenderEffect = false;
-
-			return true;
-		}
-
-		if (m_fAlpha >= 1.f)
-			m_bReverse = true;
-
-		if (m_bReverse)
-		{
-			m_fStayTime += fFrameTime * 0.001f;
-
-			if(m_fStayTime > 3.f)
-				m_fAlpha -= fFrameTime * 0.005f;
-		}
-		else
-			m_fAlpha += fFrameTime * 0.005f;
-	}
-
-	if (m_pInput->KeyDown(DIK_1))
-		m_bRenderEffect = !m_bRenderEffect;
+	EffectOn(fFrameTime);
 
 	return true;
 }
@@ -178,6 +166,57 @@ void Player::Shutdown()
 		delete m_pEngineSound;
 		m_pEngineSound = 0;
 	}
+	if (m_pSuccessSound)
+	{
+		delete m_pSuccessSound;
+		m_pSuccessSound = 0;
+	}
+
+	if (m_pFailSound)
+	{
+		delete m_pFailSound;
+		m_pFailSound = 0;
+	}
+}
+
+bool Player::CheckDistance()
+{
+	D3DXVECTOR3 vCheckPos{ 0,0,0 };
+	float fDist = sqrtf(pow((vCheckPos.x - GetPos().x), 2) + pow((vCheckPos.y - GetPos().y), 2) + pow((vCheckPos.z - GetPos().z), 2));
+
+	if(fDist < 30.f)
+		return true;
+
+	return false;
+}
+
+bool Player::CheckWinFail()
+{
+	if (CheckDistance())
+	{
+		if (!m_bSoundInit[1]) {
+			m_pSuccessSound->PlayGameSound();
+			m_bSoundInit[1] = true;
+		}
+		m_bUIRender = true;
+		m_pEndingUI->SetRender(true);
+		m_pEndingUI->SetIsSuccess(true);
+		return true;
+	}
+
+	if (m_iHp <= 0)
+	{
+		if (!m_bSoundInit[2]) {
+			m_pFailSound->PlayGameSound();
+			m_bSoundInit[2] = true;
+		}
+		m_bUIRender = true;
+		m_pEndingUI->SetRender(true);
+		m_pEndingUI->SetIsSuccess(false);
+		return true;
+	}
+
+	return false;
 }
 
 void Player::Move(float fFrameTime)
@@ -187,16 +226,16 @@ void Player::Move(float fFrameTime)
 
 	if (m_pInput->KeyPressing(DIK_W))
 	{
-		if (!m_bSoundInit) {
+		if (!m_bSoundInit[0]) {
 			m_pEngineSound->PlayGameSound();
-			m_bSoundInit = true;
+			m_bSoundInit[0] = true;
 		}
 		CheckSpeed(CameraClass::MOVE_FORWARD, fFrameTime);
 		m_pCamera->MoveCamera(CameraClass::MOVE_FORWARD, fFrameTime*m_fSpeed);
 	}
 	else
 	{
-		m_bSoundInit = false;
+		m_bSoundInit[0] = false;
 		CheckSpeed(CameraClass::MOVE_FORWARD, fFrameTime, true);
 		m_pCamera->MoveCamera(CameraClass::MOVE_FORWARD, fFrameTime*m_fSpeed);
 	}
@@ -246,7 +285,7 @@ void Player::CheckSpeed(CameraClass::MOVE eMove, float fFrameTime, bool bCheck)
 			if (m_fSpeed <= 1.f)
 				m_fSpeed = 1.f;
 
-			m_fSpeed -= fFrameTime * 0.002f;
+			m_fSpeed -= fFrameTime * 0.001f;
 		}
 		else
 		{
@@ -255,7 +294,7 @@ void Player::CheckSpeed(CameraClass::MOVE eMove, float fFrameTime, bool bCheck)
 				m_fSpeed = m_fMaxSpeed;
 				return;
 			}
-			m_fSpeed += fFrameTime * 0.002f;
+			m_fSpeed += fFrameTime * 0.001f;
 		}
 	}
 	if (eMove == CameraClass::MOVE_LEFT)
@@ -308,4 +347,47 @@ void Player::CheckSpeed(CameraClass::MOVE eMove, float fFrameTime, bool bCheck)
 			m_pCamera->RotateCamera(CameraClass::MOVE_RIGHT, m_fRotSpeed[1]);
 		}
 	}
+}
+
+void Player::EffectOn(float fFrameTime)
+{
+	if (m_bRenderEffect)
+	{
+		if (m_fAlpha < 0.f)
+		{
+			m_fAlpha = 0.f;
+			m_fStayTime = 0.f;
+			m_bReverse = false;
+			m_bRenderEffect = false;
+
+			return;
+		}
+
+		if (m_fAlpha >= 1.f)
+			m_bReverse = true;
+
+		if (m_bReverse)
+		{
+			m_fStayTime += fFrameTime * 0.001f;
+
+			if (m_fStayTime > 3.f)
+				m_fAlpha -= fFrameTime * 0.005f;
+		}
+		else
+			m_fAlpha += fFrameTime * 0.005f;
+	}
+}
+
+void Player::ResetPlayer()
+{
+	m_pCamera->SetPos(650.f, 0.f, -600.f);
+	SetPos(m_pCamera->GetPos());
+	m_iHp = 5;
+	m_bUIRender = false;
+	m_pEndingUI->SetRender(false);
+	for (int i = 0; i < 3; ++i)
+		m_bSoundInit[i] = false;
+	m_bRenderEffect = false;
+	m_bReverse = false;
+	m_fStayTime = 0.f;
 }

@@ -106,6 +106,12 @@
     <Filter Include="WinMain\SystemClass\SoundClass">
       <UniqueIdentifier>{62c42df7-34b1-4f5c-852a-a29f69b85585}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WinMain\ClientClass\EndingUI">
+      <UniqueIdentifier>{8e95d632-9df6-43f8-b69a-d26f20830b4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMain\ClientClass\HpUI">
+      <UniqueIdentifier>{67ba147f-4ddf-405d-973f-9d9c53a83035}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputClass.cpp">
@@ -195,6 +201,12 @@
     <ClCompile Include="SoundClass.cpp">
       <Filter>WinMain\SystemClass\SoundClass</Filter>
     </ClCompile>
+    <ClCompile Include="EndingUI.cpp">
+      <Filter>WinMain\ClientClass\EndingUI</Filter>
+    </ClCompile>
+    <ClCompile Include="HpUI.cpp">
+      <Filter>WinMain\ClientClass\HpUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InputClass.h">
@@ -280,6 +292,12 @@
     </ClInclude>
     <ClInclude Include="SoundClass.h">
       <Filter>WinMain\SystemClass\SoundClass</Filter>
+    </ClInclude>
+    <ClInclude Include="EndingUI.h">
+      <Filter>WinMain\ClientClass\EndingUI</Filter>
+    </ClInclude>
+    <ClInclude Include="HpUI.h">
+      <Filter>WinMain\ClientClass\HpUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

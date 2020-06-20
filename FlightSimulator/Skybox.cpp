@@ -23,7 +23,7 @@ Skybox::~Skybox()
 void Skybox::Init()
 {
 	D3DXMATRIX matScale;
-	D3DXMatrixScaling(&matScale, 700.f, 700.f, 700.f);
+	D3DXMatrixScaling(&matScale, 1000.f, 1000.f, 1000.f);
 	SetWorld(matScale);
 
 	m_eTag = TAG_SKYBOX;
@@ -31,7 +31,7 @@ void Skybox::Init()
 
 bool Skybox::Frame(float fFrameTime)
 {
-	SetPos(m_pCamera->GetPos());
+	//SetPos(m_pCamera->GetPos());
 
 	return true;
 }

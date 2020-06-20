@@ -43,6 +43,7 @@ private:
 	void ShutdownDirectSound();
 
 	bool LoadWaveFile(char*, IDirectSoundBuffer8**);
+	bool LoadBGMFile(char*, IDirectSoundBuffer8**);
 	void ShutdownWaveFile(IDirectSoundBuffer8**);
 
 	bool PlayWaveFileLoop();

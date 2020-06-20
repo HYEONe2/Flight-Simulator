@@ -25,6 +25,7 @@ private:
 	GameObject* m_pPlayer;
 	Collision* m_pCollision;
 	D3DXVECTOR3 m_vPos;
+	D3DXVECTOR3 m_vOriginPos;
 	D3DXVECTOR3 m_vDir;
 	bool m_bIsCloser;
 	float m_fDist = 0.f;

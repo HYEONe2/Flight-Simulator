@@ -37,7 +37,7 @@ void Planet::Move(float fFrameTime)
 {
 	static float rotation = 0.0f;
 	// Update the rotation variable each frame.
-	rotation += (float)D3DX_PI * 0.00001f;
+	rotation += (float)D3DX_PI * 0.000001f;
 	if (rotation > 360.0f)
 	{
 		rotation -= 360.0f;
@@ -46,13 +46,16 @@ void Planet::Move(float fFrameTime)
 
 	D3DXMatrixScaling(&matScale, m_fScale, m_fScale, m_fScale);
 	D3DXMatrixRotationY(&matRot, rotation*3.f);
-	D3DXMatrixRotationY(&matRev, rotation* m_fDist*0.004f);
-	if(m_fDist < 51.f&&m_fDist>11.f)
-		D3DXMatrixRotationY(&matRev, rotation* m_fDist*0.05f);
+	D3DXMatrixRotationY(&matRev, rotation* m_fDist*0.008f);
+	if(m_fDist < 111.f&&m_fDist>11.f)
+		D3DXMatrixRotationY(&matRev, rotation* m_fDist*0.1f);
 
-	if (m_fScale < 10.f)
-		D3DXMatrixRotationY(&matRev, rotation* m_fDist*0.0007f);
-	D3DXMatrixTranslation(&matTans, m_fDist, 0.f, 0.f);
+	if (m_fScale < 10.f) {
+		D3DXMatrixRotationY(&matRev, rotation* m_fDist*0.007f);
+		D3DXMatrixTranslation(&matTans, m_fDist, 0.f, -700.f);
+	}
+	else
+		D3DXMatrixTranslation(&matTans, m_fDist, 0.f, 0.f);
 
 
 	m_matWorld = matScale * matRot * matTans * matRev;

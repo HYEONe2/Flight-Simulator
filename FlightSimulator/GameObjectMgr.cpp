@@ -9,6 +9,8 @@
 #include "Skybox.h"
 #include "Player.h"
 #include "DistanceUI.h"
+#include "EndingUI.h"
+#include "HpUI.h"
 
 #include <iostream>
 using namespace std;
@@ -85,10 +87,14 @@ void GameObjectMgr::Render(D3DClass * pD3D, LightShaderClass* pLightShader, Ligh
 			dynamic_cast<Player*>(iter)->Render(pD3D, pLightShader, pLight);
 			continue;
 		}
-		else if (iter->GetTag() == GameObject::TAG_UI)
-		{
+		else if (iter->GetTag() == GameObject::TAG_DISTANCEUI)
 			dynamic_cast<DistanceUI*>(iter)->Render(pD3D, pLightShader, pLight);
-			//continue;
+		else if (iter->GetTag() == GameObject::TAG_ENDINGUI)
+			dynamic_cast<EndingUI*>(iter)->Render(pD3D, pLightShader, pLight);
+		else if (iter->GetTag() == GameObject::TAG_HPUI)
+		{
+			dynamic_cast<HpUI*>(iter)->Render(pD3D, pLightShader, pLight);
+			continue;
 		}
 
 		iter->Render(pD3D->GetDeviceContext());
