@@ -1,18 +1,5 @@
 #include "SystemClass.h"
 
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
-
-#define _CRTDBG_MAP_ALLOC
-#include <cstdlib>
-#include <crtdbg.h>
-
-#ifdef _DEBUG
-#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
-// Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
-// allocations to be of _CLIENT_BLOCK type
-#else
-#define DBG_NEW new
-#endif
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)
 {
@@ -37,8 +24,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline,
 	System->Shutdown();
 	delete System;
 	System = 0;
-
-	_CrtDumpMemoryLeaks();
 
 	return 0;
 }

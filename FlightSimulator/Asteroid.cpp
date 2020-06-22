@@ -2,8 +2,6 @@
 #include "Player.h"
 #include "Collision.h"
 
-#include <iostream>
-using namespace std;
 
 Asteroid::Asteroid()
 {
@@ -34,7 +32,6 @@ void Asteroid::Init(D3DXVECTOR3 _vPos)
 	m_pCollision = new Collision;
 	m_pCollision->Init(Collision::COL_ASEROID, _vPos, 10.0f);
 	m_vOriginPos = m_vPos;
-	cout << m_vPos.x << "," << m_vPos.y << endl;
 	m_eTag = TAG_ASTEROID;
 	m_fDist = (rand() % 10)*1.f;
 }
@@ -75,7 +72,6 @@ void Asteroid::Move(float fFrameTime)
 {
 	D3DXVECTOR3 vPlayerPos = m_pPlayer->GetPos();
 	float fDist = D3DXVec3Length(&(vPlayerPos - m_vPos));
-	//cout<<fDist<<endl;
 	float fSpeed = 0.13f;
 	if (fDist < 250.f) {
 		if (!m_bIsCloser)

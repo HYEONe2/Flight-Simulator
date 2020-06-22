@@ -13,9 +13,6 @@
 #include "EndingUI.h"
 #include "HpUI.h"
 
-#include <iostream>
-using namespace std;
-
 GameObjectMgr::GameObjectMgr()
 {
 }

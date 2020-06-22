@@ -1,8 +1,5 @@
 #include "CollisionMgr.h"
 
-#include<iostream>
-using namespace std;
-
 CollisionMgr::CollisionMgr()
 {
 }

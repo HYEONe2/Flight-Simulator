@@ -11,9 +11,6 @@ class Collision;
 class SoundClass;
 class EndingUI;
 
-#include <iostream>
-using namespace std;
-
 class Player :
 	public GameObject
 {
@@ -27,7 +24,7 @@ public:
 	void SetInput(InputClass* pInput) { m_pInput = pInput; }
 	void SetEndingUI(EndingUI* pEndingUI) { m_pEndingUI = pEndingUI; }
 	void SetEffectOn() { m_bRenderEffect = true; m_fStayTime = 0; }
-	void SetDamage() { --m_iHp; cout << m_iHp << endl; }
+	void SetDamage() { --m_iHp; }
 	
 	int GetHp() { return m_iHp; }
 	bool GetRender() { return m_bUIRender; }

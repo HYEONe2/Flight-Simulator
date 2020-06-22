@@ -4,9 +4,6 @@
 #include "CameraClass.h"
 #include "TextureShaderClass.h"
 
-#include <iostream>
-using namespace std;
-
 EndingUI::EndingUI()
 {
 	Init();
