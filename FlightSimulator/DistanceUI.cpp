@@ -1,9 +1,8 @@
 #include "DistanceUI.h"
 
 #include "D3DClass.h"
-#include "LightShaderClass.h"
-#include "LightClass.h"
 #include "CameraClass.h"
+#include "TextureShaderClass.h"
 
 #include <iostream>
 using namespace std;
@@ -51,7 +50,7 @@ bool DistanceUI::Frame(float fFrameTime)
 	return true;
 }
 
-void DistanceUI::Render(D3DClass * pD3D, LightShaderClass * pLightShader, LightClass * pLight)
+void DistanceUI::Render(D3DClass * pD3D, TextureShaderClass * pTextureShader)
 {
 	D3DXMATRIX matScale, matTrans, matWorld;
 
@@ -69,6 +68,10 @@ void DistanceUI::Render(D3DClass * pD3D, LightShaderClass * pLightShader, LightC
 	D3DXMatrixScaling(&matScale, 0.4f, 0.02f, 0.4f);
 	m_matWorld = matTrans * matScale * matBill;
 
+	dynamic_cast<ModelClass*>(this)->Render(pD3D->GetDeviceContext());
+	pTextureShader->Render(pD3D->GetDeviceContext(), dynamic_cast<ModelClass*>(this)->GetIndexCount(), m_matWorld, m_pCamera->GetView(),
+		pD3D->GetProj(), dynamic_cast<ModelClass*>(this)->GetTexture());
+
 	if (m_fRate < 0.01f)
 		m_fRate = 0.f;
 	if (m_fRate > 0.99f)
@@ -80,9 +83,8 @@ void DistanceUI::Render(D3DClass * pD3D, LightShaderClass * pLightShader, LightC
 	m_matSubWorld = matTrans * matScale * matWorld * m_matWorld;
 	
 	m_pDistance->Render(pD3D->GetDeviceContext());
-	pLightShader->Render(pD3D->GetDeviceContext(), m_pDistance->GetIndexCount(), m_matSubWorld, m_pCamera->GetView(),
-		pD3D->GetProj(), m_pDistance->GetTexture(), pLight->GetDirection(), pLight->GetAmbientColor(),
-		pLight->GetDiffuseColor(), m_pCamera->GetPos(), pLight->GetSpecularColor(), pLight->GetSpecularPower());
+	pTextureShader->Render(pD3D->GetDeviceContext(), m_pDistance->GetIndexCount(), m_matSubWorld, m_pCamera->GetView(),
+		pD3D->GetProj(), m_pDistance->GetTexture());
 }
 
 void DistanceUI::Shutdown()

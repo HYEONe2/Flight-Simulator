@@ -6,11 +6,12 @@
 #include <list>
 using namespace std;
 
+#include "InputClass.h"
 #include "TextClass.h"
 #include "CameraClass.h"
 #include "LightShaderClass.h"
-#include "InputClass.h"
 #include "LightClass.h"
+#include "TextureShaderClass.h"
 
 class SoundClass;
 class CollisionMgr;
@@ -44,16 +45,18 @@ private:
 
 private:
 	D3DClass* m_pD3D;
+	InputClass* m_pInputClass;
 	CameraClass* m_pCamera;
+	TextClass* m_pText;
+
 	LightShaderClass* m_pLightShader;
 	LightClass* m_pLight;
-	TextClass* m_pText;
-	InputClass* m_pInputClass;
+	TextureShaderClass* m_pTextureShader;
 
 	GameObjectMgr* m_pGameObjectMgr;
-	CollisionMgr* m_pCollisionMgr;
-
 	GameObject* m_pPlayer;
+
+	CollisionMgr* m_pCollisionMgr;
 	list<GameObject*> m_plistAs;
 
 	SoundClass* m_pHitSound;

@@ -106,6 +106,18 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_pLight->SetSpecularColor(1.f, 1.f, 1.f, 1.f);
 	m_pLight->SetSpecularPower(32.f);
 
+	m_pTextureShader = new TextureShaderClass;
+	if (!m_pLightShader)
+		return false;
+
+	// Initialize the light shader object.
+	result = m_pTextureShader->Initialize(m_pD3D->GetDevice(), hwnd);
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the texture shader object.", L"Error", MB_OK);
+		return false;
+	}
+
 	m_pHitSound = new SoundClass;
 	if (!m_pHitSound->InitializeSound(hwnd, "../Engine/data/Sound/CriticalSound.wav"))
 		return false;
@@ -121,7 +133,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	GameObject* pGameObject = nullptr;
 	
 	pGameObject = new Skybox;
-	pGameObject->InitializeForCube(m_pD3D->GetDevice(), "../Engine/data/Cube.txt", L"../Engine/data/Skybox.jpg");
+	pGameObject->InitializeForCube(m_pD3D->GetDevice(), "../Engine/data/Cube.txt", L"../Engine/data/Skybox.png");
 	dynamic_cast<Skybox*>(pGameObject)->SetD3D(m_pD3D);
 	dynamic_cast<Skybox*>(pGameObject)->SetCamera(m_pCamera);
 	m_pGameObjectMgr->PushGameObject(pGameObject);
@@ -246,6 +258,12 @@ void GraphicsClass::Shutdown()
 		delete m_pLightShader;
 		m_pLightShader = 0;
 	}
+	if (m_pTextureShader)
+	{
+		m_pTextureShader->Shutdown();
+		delete m_pTextureShader;
+		m_pTextureShader = 0;
+	}
 	// Release the camera object.
 	if (m_pCamera)
 	{
@@ -356,7 +374,7 @@ bool GraphicsClass::Render()
 	m_pD3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
 	// Generate the view matrix based on the camera's position.
-	m_pGameObjectMgr->Render(m_pD3D, m_pLightShader, m_pLight, m_pCamera);
+	m_pGameObjectMgr->Render(m_pD3D, m_pCamera, m_pLightShader, m_pLight, m_pTextureShader);
 	
 	RenderText();
 

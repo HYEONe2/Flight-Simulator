@@ -2,8 +2,7 @@
 #include "GameObject.h"
 
 class D3DClass;
-class LightShaderClass;
-class LightClass;
+class TextureShaderClass;
 class ModelClass;
 class CameraClass;
 
@@ -25,7 +24,7 @@ public:
 	void Init(D3DClass*);
 
 	virtual bool Frame(float);
-	void Render(D3DClass*, LightShaderClass*, LightClass*);
+	void Render(D3DClass*, TextureShaderClass*);
 
 private:
 	void Shutdown();

@@ -9,6 +9,7 @@ class GameObject;
 class CameraClass;
 class LightClass;
 class LightShaderClass;
+class TextureShaderClass;
 
 class GameObjectMgr
 {
@@ -21,14 +22,13 @@ public:
 	bool PushGameObject(GameObject* pGameObject);
 	
 	bool Frame(float);
-	void Render(D3DClass*, LightShaderClass*, LightClass*, CameraClass*);
+	void Render(D3DClass*, CameraClass*, LightShaderClass*, LightClass*, TextureShaderClass*);
 	
 	void EraseGameObject(GameObject* pGameObject);
 	void Shutdown();
 
 	int Get_Size() { return m_GameObjectLst.size(); }
 	int Get_PolySize();
-
 
 private:
 	list<GameObject*> m_GameObjectLst;

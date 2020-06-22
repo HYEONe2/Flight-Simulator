@@ -1,9 +1,8 @@
 #include "HpUI.h"
 
 #include "D3DClass.h"
-#include "LightShaderClass.h"
-#include "LightClass.h"
 #include "CameraClass.h"
+#include "TextureShaderClass.h"
 #include "Player.h"
 
 HpUI::HpUI()
@@ -37,7 +36,7 @@ bool HpUI::Frame(float fFrameTime)
 	return true;
 }
 
-void HpUI::Render(D3DClass * pD3D, LightShaderClass * pLightShader, LightClass * pLight)
+void HpUI::Render(D3DClass * pD3D, TextureShaderClass * pTextureShader)
 {
 	D3DXMATRIX matScale, matTrans, matWorld;
 
@@ -61,9 +60,8 @@ void HpUI::Render(D3DClass * pD3D, LightShaderClass * pLightShader, LightClass *
 		m_matWorld = matTrans * matScale * matBill;
 		
 		dynamic_cast<ModelClass*>(this)->Render(pD3D->GetDeviceContext());
-		pLightShader->Render(pD3D->GetDeviceContext(), dynamic_cast<ModelClass*>(this)->GetIndexCount(), m_matWorld, m_pCamera->GetView(),
-			pD3D->GetProj(), dynamic_cast<ModelClass*>(this)->GetTexture(), pLight->GetDirection(), pLight->GetAmbientColor(),
-			pLight->GetDiffuseColor(), m_pCamera->GetPos(), pLight->GetSpecularColor(), pLight->GetSpecularPower());
+		pTextureShader->Render(pD3D->GetDeviceContext(), dynamic_cast<ModelClass*>(this)->GetIndexCount(), m_matWorld, m_pCamera->GetView(),
+			pD3D->GetProj(), dynamic_cast<ModelClass*>(this)->GetTexture());
 	}
 
 	pD3D->TurnOffAlphaBlending();

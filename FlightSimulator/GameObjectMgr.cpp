@@ -5,6 +5,7 @@
 #include "CameraClass.h"
 #include "LightClass.h"
 #include "LightShaderClass.h"
+#include "TextureShaderClass.h"
 
 #include "Skybox.h"
 #include "Player.h"
@@ -50,26 +51,20 @@ bool GameObjectMgr::Frame(float fFrameTime)
 	return true;
 }
 
-void GameObjectMgr::Render(D3DClass * pD3D, LightShaderClass* pLightShader, LightClass * pLight, CameraClass * pCamera)
+void GameObjectMgr::Render(D3DClass *pD3D, CameraClass *pCamera, LightShaderClass *pLightShader, LightClass *pLight, TextureShaderClass *pTextureShader)
 {
 	if (m_GameObjectLst.size() == 0)
 		return;
 
 	for (auto iter : m_GameObjectLst)
 	{
-		if (iter->GetTag() == GameObject::TAG_SKYBOX)
-		{
-			ID3D11RasterizerState* pRasterState;
-			pD3D->GetDeviceContext()->RSGetState(&pRasterState);
+		ID3D11RasterizerState* pRasterState;
+		pD3D->GetDeviceContext()->RSGetState(&pRasterState);
 
-			D3D11_RASTERIZER_DESC rasterDesc;
-			pRasterState->GetDesc(&rasterDesc);
+		D3D11_RASTERIZER_DESC rasterDesc;
+		pRasterState->GetDesc(&rasterDesc);
 
-			rasterDesc.CullMode = D3D11_CULL_NONE;
-			pD3D->GetDevice()->CreateRasterizerState(&rasterDesc, &pRasterState);
-			pD3D->GetDeviceContext()->RSSetState(pRasterState);
-		}
-		else
+		if (rasterDesc.CullMode == D3D11_CULL_NONE)
 		{
 			ID3D11RasterizerState* pRasterState;
 			pD3D->GetDeviceContext()->RSGetState(&pRasterState);
@@ -82,18 +77,25 @@ void GameObjectMgr::Render(D3DClass * pD3D, LightShaderClass* pLightShader, Ligh
 			pD3D->GetDeviceContext()->RSSetState(pRasterState);
 		}
 
-		if (iter->GetTag() == GameObject::TAG_PLAYER)
+		switch (iter->GetTag())
 		{
+		case GameObject::TAG_SKYBOX:
+			rasterDesc.CullMode = D3D11_CULL_NONE;
+			pD3D->GetDevice()->CreateRasterizerState(&rasterDesc, &pRasterState);
+			pD3D->GetDeviceContext()->RSSetState(pRasterState);
+			dynamic_cast<Skybox*>(iter)->Render(pD3D, pTextureShader);
+			continue;
+		case GameObject::TAG_PLAYER:
 			dynamic_cast<Player*>(iter)->Render(pD3D, pLightShader, pLight);
 			continue;
-		}
-		else if (iter->GetTag() == GameObject::TAG_DISTANCEUI)
-			dynamic_cast<DistanceUI*>(iter)->Render(pD3D, pLightShader, pLight);
-		else if (iter->GetTag() == GameObject::TAG_ENDINGUI)
-			dynamic_cast<EndingUI*>(iter)->Render(pD3D, pLightShader, pLight);
-		else if (iter->GetTag() == GameObject::TAG_HPUI)
-		{
-			dynamic_cast<HpUI*>(iter)->Render(pD3D, pLightShader, pLight);
+		case GameObject::TAG_DISTANCEUI:
+			dynamic_cast<DistanceUI*>(iter)->Render(pD3D, pTextureShader);
+			continue;
+		case GameObject::TAG_ENDINGUI:
+			dynamic_cast<EndingUI*>(iter)->Render(pD3D, pTextureShader);
+			continue;
+		case GameObject::TAG_HPUI:
+			dynamic_cast<HpUI*>(iter)->Render(pD3D, pTextureShader);
 			continue;
 		}
 

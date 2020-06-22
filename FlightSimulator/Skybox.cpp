@@ -2,9 +2,7 @@
 
 #include "D3DClass.h"
 #include "CameraClass.h"
-
-#include <iostream>
-using namespace std;
+#include "TextureShaderClass.h"
 
 Skybox::Skybox()
 {
@@ -31,9 +29,14 @@ void Skybox::Init()
 
 bool Skybox::Frame(float fFrameTime)
 {
-	//SetPos(m_pCamera->GetPos());
-
 	return true;
+}
+
+void Skybox::Render(D3DClass *pD3D, TextureShaderClass *pTextureShader)
+{
+	dynamic_cast<ModelClass*>(this)->Render(pD3D->GetDeviceContext());
+	pTextureShader->Render(pD3D->GetDeviceContext(), dynamic_cast<ModelClass*>(this)->GetIndexCount(), m_matWorld, m_pCamera->GetView(),
+		pD3D->GetProj(), dynamic_cast<ModelClass*>(this)->GetTexture());
 }
 
 void Skybox::Shutdown()

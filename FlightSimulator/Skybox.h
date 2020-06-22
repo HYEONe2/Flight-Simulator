@@ -3,6 +3,7 @@
 
 class D3DClass;
 class CameraClass;
+class TextureShaderClass;
 
 class Skybox :
 	public GameObject
@@ -15,6 +16,7 @@ public:
 public:
 	void Init();
 	virtual bool Frame(float);
+	void Render(D3DClass*, TextureShaderClass*);
 
 private:
 	void Shutdown();

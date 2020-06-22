@@ -1,9 +1,8 @@
 #include "EndingUI.h"
 
 #include "D3DClass.h"
-#include "LightShaderClass.h"
-#include "LightClass.h"
 #include "CameraClass.h"
+#include "TextureShaderClass.h"
 
 #include <iostream>
 using namespace std;
@@ -38,7 +37,7 @@ bool EndingUI::Frame(float fFrameTime)
 	return true;
 }
 
-void EndingUI::Render(D3DClass * pD3D, LightShaderClass * pLightShader, LightClass * pLight)
+void EndingUI::Render(D3DClass * pD3D, TextureShaderClass * pTextureShader)
 {
 	if (!m_bRender)
 		return;
@@ -59,6 +58,10 @@ void EndingUI::Render(D3DClass * pD3D, LightShaderClass * pLightShader, LightCla
 
 		D3DXMatrixScaling(&matScale, 0.5f, 0.5f, 0.5f);
 		m_matWorld = matScale * matBill;
+
+		dynamic_cast<ModelClass*>(this)->Render(pD3D->GetDeviceContext());
+		pTextureShader->Render(pD3D->GetDeviceContext(), dynamic_cast<ModelClass*>(this)->GetIndexCount(), m_matWorld, m_pCamera->GetView(),
+			pD3D->GetProj(), dynamic_cast<ModelClass*>(this)->GetTexture());
 	}
 	else
 	{
@@ -78,9 +81,8 @@ void EndingUI::Render(D3DClass * pD3D, LightShaderClass * pLightShader, LightCla
 		m_matWorld = matScale * matBill;
 
 		m_pFail->Render(pD3D->GetDeviceContext());
-		pLightShader->Render(pD3D->GetDeviceContext(), m_pFail->GetIndexCount(), m_matWorld, m_pCamera->GetView(),
-			pD3D->GetProj(), m_pFail->GetTexture(), pLight->GetDirection(), pLight->GetAmbientColor(),
-			pLight->GetDiffuseColor(), m_pCamera->GetPos(), pLight->GetSpecularColor(), pLight->GetSpecularPower());
+		pTextureShader->Render(pD3D->GetDeviceContext(), m_pFail->GetIndexCount(), m_matWorld, m_pCamera->GetView(),
+			pD3D->GetProj(), m_pFail->GetTexture());
 	}
 }
 
