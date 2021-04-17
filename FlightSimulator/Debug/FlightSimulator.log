@@ -1,2 +1,40 @@
-﻿  Main.cpp
-  FlightSimulator.vcxproj -> C:\Users\rkek3\Documents\GitHub\Flight-Simulator\Debug\FlightSimulator.exe
+﻿  Asteroid.cpp
+  BitmapClass.cpp
+  CameraClass.cpp
+  Collision.cpp
+  CollisionMgr.cpp
+  ColorShaderClass.cpp
+  CpuClass.cpp
+  D3DClass.cpp
+  DistanceUI.cpp
+  EndingUI.cpp
+  FontClass.cpp
+  FontShaderClass.cpp
+  FpsClass.cpp
+  GameObject.cpp
+  GameObjectMgr.cpp
+  GraphicsClass.cpp
+  HpUI.cpp
+  InputClass.cpp
+  LightClass.cpp
+  LightShaderClass.cpp
+  코드를 생성하고 있습니다...
+e:\directx\flight-simulator\flightsimulator\gameobject.h(28): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
+e:\directx\flight-simulator\flightsimulator\gameobject.h(28): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
+e:\directx\flight-simulator\flightsimulator\gameobject.h(28): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
+e:\directx\flight-simulator\flightsimulator\gameobject.h(28): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
+  컴파일하고 있습니다...
+  Main.cpp
+  ModelClass.cpp
+  Planet.cpp
+  Player.cpp
+  Skybox.cpp
+  SoundClass.cpp
+  SystemClass.cpp
+  TextClass.cpp
+  TextureClass.cpp
+  TextureShaderClass.cpp
+  TimerClass.cpp
+  코드를 생성하고 있습니다...
+e:\directx\flight-simulator\flightsimulator\gameobject.h(28): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
+  FlightSimulator.vcxproj -> E:\DirectX\Flight-Simulator\Debug\FlightSimulator.exe
